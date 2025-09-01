@@ -6,7 +6,7 @@
 /*   By: tnolent <tnolent@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 15:15:11 by tnolent           #+#    #+#             */
-/*   Updated: 2025/09/01 15:59:27 by tnolent          ###   ########.fr       */
+/*   Updated: 2025/09/01 17:35:12 by tnolent          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,15 +163,13 @@ void	draw_line(t_player *player, t_parse *parse, float start_x, int i)
 	ray_y = player->y;
 	int	j = 0;
 	while (!touch(ray_x, ray_y, parse))
-	{ 
-		// && j == 100
-		if (DEBUG)
+	{
+		if (DEBUG && j == 100)
 		{
 			j = 0;
 			put_pixel(ray_x, ray_y, 0xFF0000, parse);
 		}
-		else if (j != 100)
-			j++;
+		j++;
 		ray_x += cos_angle;
 		ray_y += sin_angle;
 	}
@@ -209,13 +207,36 @@ int	draw_loop(t_parse *parse)
 		draw_square(player->x, player->y, 10, 0x00FF00, parse);
 	}
 	i = 0;
-	// usleep(100000);
 	while (i < WIDTH)
 	{
 		draw_line(player, parse, start_x, i++);
 		start_x += fraction;
 	}
 	mlx_put_image_to_window(parse->mlx, parse->win, parse->img, 0, 0);
+	return (0);
+}
+
+void	destroy_win(t_parse *parse)
+{
+	mlx_destroy_image(parse->mlx, parse->img);
+	mlx_destroy_window(parse->mlx, parse->win);
+	mlx_destroy_display(parse->mlx);
+	free(parse->map);
+	free(parse->mlx);
+	parse->mlx = NULL;
+	exit(0);
+}	
+
+int	close_window(t_parse *parse)
+{
+	destroy_win(parse);
+	return (0);
+}
+
+int	key_hook(int keycode, t_parse *parse)
+{
+	if (keycode == 65307)
+		destroy_win(parse);
 	return (0);
 }
 
@@ -228,6 +249,8 @@ int	main(void)
 	mlx_hook(parse.win, 3, 1L << 1, key_release, &parse.player);
 	mlx_loop_hook(parse.mlx, draw_loop, &parse);
 	mlx_put_image_to_window(parse.mlx, parse.win, parse.img, 0, 0);
+	mlx_key_hook(parse.win, key_hook, &parse);
+	mlx_hook(parse.win, 17, 0, close_window, &parse);
 	mlx_loop(parse.mlx);
 	return (0);
 }

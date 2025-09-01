@@ -6,7 +6,7 @@
 /*   By: tnolent <tnolent@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 14:58:49 by tnolent           #+#    #+#             */
-/*   Updated: 2025/09/01 16:00:25 by tnolent          ###   ########.fr       */
+/*   Updated: 2025/09/01 17:14:53 by tnolent          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@
 # define HEIGHT 800
 # define WIDTH 1080
 
-# define PI 3.1416
+# define PI 3.14159265359
 # define W 119
 # define A 97
 # define S 115
@@ -33,7 +33,8 @@
 # define LEFT 65361
 # define RIGHT 65363
 # define BLOCK 64
-# define DEBUG 0
+
+# define DEBUG 1
 
 typedef struct s_player
 {
