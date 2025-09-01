@@ -2,17 +2,13 @@ NAME	= Cub3d
 CC		= cc
 CFLAGS	= -Wall -Wextra -Werror
 INCLUDE	= -I includes -I libft -I minilibx-linux
-MLX	= libmlx_Linux.a libmlx.a
+MLX	= minilibx-linux/libmlx_Linux.a minilibx-linux/libmlx.a
 LIBFT	= libft/libft.a
 OBJS	= $(patsubst srcs/%.c, objs/%.o, $(SRCS))
+DEPS	= $(wildcard includes/*.h)
 
-SRCS_FILES = main
+SRCS_FILES = main player
 SRCS := $(addprefix srcs/, $(addsuffix .c, $(SRCS_FILES)))
-
-
-
-
-
 
 all: $(NAME)
 
@@ -22,11 +18,13 @@ $(NAME): $(OBJS) $(LIBFT) $(MLX)
 $(LIBFT):
 	make -C libft
 
-$(MLX) :
-	make -C minilibx-linux
+$(MLX):
+	@if [ ! -f minilibx-linux/libmlx_Linux.a ] && [ ! -f minilibx-linux/libmlx.a ]; then \
+		make -C minilibx-linux; \
+	fi
 
 
-objs/%.o: srcs/%.c
+objs/%.o: srcs/%.c $(DEPS)
 	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) $(INCLUDE) -c $< -o $@
 
