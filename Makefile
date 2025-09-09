@@ -7,7 +7,7 @@ LIBFT	= libft/libft.a
 OBJS	= $(patsubst srcs/%.c, objs/%.o, $(SRCS))
 DEPS	= $(wildcard includes/*.h)
 
-SRCS_FILES = main player
+SRCS_FILES = main player hook formule parsing mlx_utils init
 SRCS := $(addprefix srcs/, $(addsuffix .c, $(SRCS_FILES)))
 
 all: $(NAME)

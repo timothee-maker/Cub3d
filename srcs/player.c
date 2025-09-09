@@ -6,7 +6,7 @@
 /*   By: tnolent <tnolent@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/01 10:37:28 by tnolent           #+#    #+#             */
-/*   Updated: 2025/09/01 13:44:25 by tnolent          ###   ########.fr       */
+/*   Updated: 2025/09/08 09:32:13 by tnolent          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,11 @@ void	init_player(t_player *player)
 	player->r_right = false;
 }
 
-int	key_press(int keycode, t_player *player)
+int	key_press(int keycode, t_parse *parse)
 {
+	t_player *player = NULL;
+
+	player = &parse->player;
 	if (keycode == W)
 		player->k_up = true;
 	if (keycode == S)
@@ -39,6 +42,8 @@ int	key_press(int keycode, t_player *player)
 		player->r_left = true;
 	if (keycode == RIGHT)
 		player->r_right = true;
+	if (keycode == ECHAP)
+		destroy_win(parse);
 	return (0);
 }
 
@@ -69,7 +74,7 @@ void	move_player(t_player *player)
 	angle_speed = 0.01;
 	cos_angle = cos(player->angle);
 	sin_angle = sin(player->angle);
-	speed = 1;
+	speed = 2;
 	if (player->r_left)
 		player->angle -= angle_speed;
 	if (player->r_right)
@@ -98,4 +103,5 @@ void	move_player(t_player *player)
 		player->x -= sin_angle * speed;
 		player->y += cos_angle * speed;
 	}
+	// printf("[%f][%f]\n", player->x, player->y);
 }
