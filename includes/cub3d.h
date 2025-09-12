@@ -6,7 +6,7 @@
 /*   By: tnolent <tnolent@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 14:58:49 by tnolent           #+#    #+#             */
-/*   Updated: 2025/09/12 13:15:09 by tnolent          ###   ########.fr       */
+/*   Updated: 2025/09/12 15:54:34 by tnolent          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,6 +117,13 @@ typedef struct s_parse
 	t_cimg		texture[4];
 }				t_parse;
 
+/*-------------------------GAME------------------------------------*/
+int	draw_loop(t_parse *parse);
+void	draw_line(t_player *player, t_parse *parse, float start_x, int i,
+		t_cimg *image);
+
+/*-----------------------PLAYER----------------------------------*/
+
 void			move_player(t_player *player);
 int				key_press(int keycode, t_parse *parse);
 void			init_player(t_player *player);
@@ -134,6 +141,7 @@ float			fixed_dist(float x1, float y1, float x2, float y2,
 					t_parse *parse);
 float			distance(float x, float y);
 void			draw_square(int x, int y, int size, int color, t_cimg *image);
+int				find_face(t_ray *ray);
 int				cast_ray(t_parse *parse, t_player *player, t_ray *ray);
 
 /*--------------------------PARSING-------------------------------*/
@@ -142,9 +150,22 @@ char			**get_map(void);
 
 /*--------------------------MLX TOOLS MODIF------------------------------*/
 void			clear_image(t_cimg *img);
+int				get_pixel(t_cimg *t, int x, int y);
 void			put_pixel(int x, int y, int color, t_cimg *img);
 
 /*-------------------------INIT------------------------------------------*/
 void			init_img_clean(t_cimg *img);
+void			init_texture_img(t_parse *parse, t_cimg *image, char *path);
+void			init_img(t_parse *parse, t_cimg *image);
+void			init_tex(t_pixel *tex, t_ray *ray);
+void			init_mlx(t_parse *parse);
+
+/*-------------------------SET STRUCT------------------------------------------*/
+void			set_texture(t_parse *parse, t_ray *ray, t_player *player,
+					t_pixel *tex);
+void			set_mlx(t_parse *parse);
+
+/*---------------------------HANDLE IMAGES-----------------------------------*/
+void			load_img(t_parse *parse, t_cimg *texture, char *str);
 
 #endif

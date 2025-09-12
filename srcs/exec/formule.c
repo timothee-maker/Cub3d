@@ -6,7 +6,7 @@
 /*   By: tnolent <tnolent@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/05 15:47:19 by tnolent           #+#    #+#             */
-/*   Updated: 2025/09/12 09:47:10 by tnolent          ###   ########.fr       */
+/*   Updated: 2025/09/12 15:52:02 by tnolent          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,17 +19,9 @@ bool	touch(float px, float py, t_parse *parse)
 
 	x = px / BLOCK;
 	y = py / BLOCK;
-	// printf("[%d][%d][%f][%f]\n", x, y, px, py);
 	if (parse->map[y][x] == '1')
 		return (true);
 	return (false);
-}
-
-float	distance(float x, float y)
-{
-	// printf("x[%f]y[%f]", x, y);
-	// printf("sqrt[%f]", sqrt(x * x + y * y));
-	return (sqrt(x * x + y * y));
 }
 
 float	fixed_dist(float x1, float y1, float x2, float y2, t_parse *parse)
@@ -44,7 +36,7 @@ float	fixed_dist(float x1, float y1, float x2, float y2, t_parse *parse)
 	delta_y = y2 - y1;
 	// printf("[%f][%f]", delta_x, delta_y);
 	angle = atan2(delta_y, delta_x) - parse->player.angle;
-	fix_dist = distance(delta_x, delta_y) * cos(angle);
+	fix_dist = sqrt(delta_x * delta_x + delta_y * delta_y) * cos(angle);
 	return (fix_dist);
 }
 
@@ -65,7 +57,6 @@ void	draw_square(int x, int y, int size, int color, t_cimg *image)
 	while (i < size)
 		put_pixel(x + i++, y + size, color, image);
 }
-
 
 int	cast_ray(t_parse *parse, t_player *player, t_ray *ray)
 {
