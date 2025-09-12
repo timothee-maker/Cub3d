@@ -6,7 +6,7 @@
 /*   By: tnolent <tnolent@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 15:15:11 by tnolent           #+#    #+#             */
-/*   Updated: 2025/09/12 13:06:01 by tnolent          ###   ########.fr       */
+/*   Updated: 2025/09/12 15:04:37 by tnolent          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,10 +51,10 @@ void	set_mlx(t_parse *parse)
 	parse->map = get_map();
 	parse->mlx = mlx_init();
 	parse->win = mlx_new_window(parse->mlx, WIDTH, HEIGHT, "Cub3d");
-	load_img(parse, &parse->texture[0], "img1.xpm");
-	load_img(parse, &parse->texture[1], "img1.xpm");
-	load_img(parse, &parse->texture[2], "chat.xpm");
-	load_img(parse, &parse->texture[3], "chat.xpm");
+	load_img(parse, &parse->texture[0], "shrek.xpm");
+	load_img(parse, &parse->texture[1], "golem-clash-royal.xpm");
+	load_img(parse, &parse->texture[2], "saymyame.xpm");
+	load_img(parse, &parse->texture[3], "larry.xpm");
 }
 
 void	init_img_clean(t_cimg *img)
@@ -111,14 +111,14 @@ int	find_face(t_ray *ray)
 {
 	if (ray->side == 0)
 	{
-		if (ray->ray_x > 0)
+		if (ray->ray_dir_x > 0)
 			return (EAST);
 		else
 			return (WEST);
 	}
 	else
 	{
-		if (ray->ray_y > 0)
+		if (ray->ray_dir_y > 0)
 			return (SOUTH);
 		else
 			return (NORTH);
@@ -156,20 +156,24 @@ int	get_pixel(t_cimg *t, int x, int y)
 void	set_texture(t_parse *parse, t_ray *ray, t_player *player, t_pixel *tex)
 {
 	init_tex(tex, ray);
+	// Calcul correct de la distance perpendiculaire
 	if (ray->side == 0) // mur vertical
-		ray->corrected_dist = (ray->map_x - player->x / 64.0f + (1
-					- ray->cos_angle) / 2) / ray->ray_x;
+		ray->corrected_dist = (ray->map_x - player->x / 64.0f + (1 - ray->stepX)
+				/ 2) / ray->ray_dir_x;
 	else // mur horizontal
-		ray->corrected_dist = (ray->map_y - player->y / 64.0f + (1
-					- ray->sin_angle) / 2) / ray->ray_y;
+		ray->corrected_dist = (ray->map_y - player->y / 64.0f + (1 - ray->stepY)
+				/ 2) / ray->ray_dir_y;
+	// Calcul du point d'impact sur le mur
 	if (ray->side == 0) // mur vertical
-		tex->wall_x = player->y / 64.0f + ray->corrected_dist * ray->ray_y;
+		tex->wall_x = player->y / 64.0f + ray->corrected_dist * ray->ray_dir_y;
 	else // mur horizontal
-		tex->wall_x = player->x / 64.0f + ray->corrected_dist * ray->ray_x;
+		tex->wall_x = player->x / 64.0f + ray->corrected_dist * ray->ray_dir_x;
 	tex->wall_x -= floor(tex->wall_x);
 	tex->tex_x = (int)(tex->wall_x * (float)(parse->texture[tex->face].width));
-	if ((ray->side == 0 && ray->ray_x > 0) || (ray->side == 1
-			&& ray->ray_y < 0))
+	// Correction du flip de texture
+	// printf("[%d]", tex->face);
+	if ((ray->side == 0 && ray->ray_dir_x > 0) || (ray->side == 1
+			&& ray->ray_dir_y < 0))
 		tex->tex_x = parse->texture[tex->face].width - tex->tex_x - 1;
 	tex->step = (float)parse->texture[tex->face].height / ray->height;
 	tex->tex_pos = (tex->start_y - HEIGHT / 2 + ray->height / 2) * tex->step;
@@ -180,23 +184,26 @@ void	draw_line(t_player *player, t_parse *parse, float start_x, int i,
 {
 	t_ray	ray;
 	t_pixel	tex;
+	int		screen_x;
 
-	ray.cos_angle = cos(start_x);
-	ray.sin_angle = sin(start_x);
-	ray.ray_x = player->x;
-	ray.ray_y = player->y;
+	ray.ray_dir_x = cos(start_x);
+	ray.ray_dir_y = sin(start_x);
+	ray.pos_x = player->x;
+	ray.pos_y = player->y;
+	ray.cos_angle = ray.ray_dir_x;
+	ray.sin_angle = ray.ray_dir_y;
 	ray.index = -1;
-	while (!touch(ray.ray_x, ray.ray_y, parse))
+	while (!touch(ray.pos_x, ray.pos_y, parse))
 	{
 		if (DEBUG)
-			put_pixel(ray.ray_x, ray.ray_y, 0xFF0000, image);
-		ray.ray_x += ray.cos_angle;
-		ray.ray_y += ray.sin_angle;
+			put_pixel(ray.pos_x, ray.pos_y, 0xFF0000, image);
+		ray.pos_x += ray.cos_angle;
+		ray.pos_y += ray.sin_angle;
 	}
 	if (!DEBUG)
 	{
 		cast_ray(parse, player, &ray);
-		ray.dist = fixed_dist(player->x, player->y, ray.ray_x, ray.ray_y,
+		ray.dist = fixed_dist(player->x, player->y, ray.pos_x, ray.pos_y,
 				parse);
 		ray.height = (BLOCK / ray.dist) * (WIDTH / 2);
 		ray.start_y = (HEIGHT - ray.height) / 2;
@@ -204,8 +211,9 @@ void	draw_line(t_player *player, t_parse *parse, float start_x, int i,
 		set_texture(parse, &ray, player, &tex);
 		while (++ray.index < HEIGHT)
 		{
+			screen_x = WIDTH - i - 1;
 			if (ray.index < ray.start_y)
-				put_pixel(i, ray.index, 0xFFA500, image); // plafond
+				put_pixel(screen_x, ray.index, 0xFFA500, image); // plafond
 			else if (ray.index < ray.end)
 			{
 				tex.tex_y = (int)tex.tex_pos;
@@ -216,13 +224,13 @@ void	draw_line(t_player *player, t_parse *parse, float start_x, int i,
 				tex.tex_pos += tex.step;
 				tex.color = get_pixel(&parse->texture[tex.face], tex.tex_x,
 						tex.tex_y);
-				put_pixel(i, ray.index, tex.color, image);
+				put_pixel(screen_x, ray.index, tex.color, image);
 				// ray.color = get_side_color(ray.side, ray.cos_angle,
 				// 		ray.sin_angle);
 				// put_pixel(i, ray.index, ray.color, image); // mur
 			}
 			else
-				put_pixel(i, ray.index, 0xADD8E6, image); // sol
+				put_pixel(screen_x, ray.index, 0xADD8E6, image); // sol
 		}
 	}
 }

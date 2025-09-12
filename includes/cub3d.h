@@ -6,7 +6,7 @@
 /*   By: tnolent <tnolent@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 14:58:49 by tnolent           #+#    #+#             */
-/*   Updated: 2025/09/12 11:39:32 by tnolent          ###   ########.fr       */
+/*   Updated: 2025/09/12 13:15:09 by tnolent          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,12 +46,14 @@
 typedef struct s_ray
 {
 	float		corrected_dist;
+	float		ray_dir_x;
+	float		ray_dir_y;
 	float		deltaDistX;
 	float		deltaDistY;
 	float		cos_angle;
 	float		sin_angle;
-	float		ray_x;
-	float		ray_y;
+	float		pos_x;
+	float		pos_y;
 	float		dist;
 	float		height;
 	int			start_y;

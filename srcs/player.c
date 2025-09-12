@@ -6,7 +6,7 @@
 /*   By: tnolent <tnolent@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/01 10:37:28 by tnolent           #+#    #+#             */
-/*   Updated: 2025/09/08 09:32:13 by tnolent          ###   ########.fr       */
+/*   Updated: 2025/09/12 14:40:40 by tnolent          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,13 +35,13 @@ int	key_press(int keycode, t_parse *parse)
 	if (keycode == S)
 		player->k_down = true;
 	if (keycode == A)
-		player->k_left = true;
-	if (keycode == D)
 		player->k_right = true;
+	if (keycode == D)
+		player->k_left = true;
 	if (keycode == LEFT)
-		player->r_left = true;
-	if (keycode == RIGHT)
 		player->r_right = true;
+	if (keycode == RIGHT)
+		player->r_left = true;
 	if (keycode == ECHAP)
 		destroy_win(parse);
 	return (0);
@@ -54,13 +54,13 @@ int	key_release(int keycode, t_player *player)
 	if (keycode == S)
 		player->k_down = false;
 	if (keycode == A)
-		player->k_left = false;
-	if (keycode == D)
 		player->k_right = false;
+	if (keycode == D)
+		player->k_left = false;
 	if (keycode == LEFT)
-		player->r_left = false;
-	if (keycode == RIGHT)
 		player->r_right = false;
+	if (keycode == RIGHT)
+		player->r_left = false;
 	return (0);
 }
 
