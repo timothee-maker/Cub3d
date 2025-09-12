@@ -6,12 +6,11 @@
 /*   By: tnolent <tnolent@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/05 15:47:19 by tnolent           #+#    #+#             */
-/*   Updated: 2025/09/08 16:19:34 by tnolent          ###   ########.fr       */
+/*   Updated: 2025/09/12 09:47:10 by tnolent          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
-
 
 bool	touch(float px, float py, t_parse *parse)
 {
@@ -68,62 +67,56 @@ void	draw_square(int x, int y, int size, int color, t_cimg *image)
 }
 
 
-int	cast_ray(t_parse *parse, t_player *player, float rayDirX, float rayDirY,
-		int *side)
+int	cast_ray(t_parse *parse, t_player *player, t_ray *ray)
 {
-	int		mapX;
-	int		mapY;
-	float	deltaDistX;
-	float	deltaDistY;
+
 	int		hit;
 
 	// position de départ (case de la grille)
-	mapX = (int)(player->x / BLOCK);
-	mapY = (int)(player->y / BLOCK);
+	ray->map_x = (int)(player->x / BLOCK);
+	ray->map_y = (int)(player->y / BLOCK);
 	// longueur du rayon pour traverser une case en X ou Y
-	deltaDistX = fabs(1 / rayDirX);
-	deltaDistY = fabs(1 / rayDirY);
+	ray->deltaDistX = fabs(1 / ray->cos_angle);
+	ray->deltaDistY = fabs(1 / ray->sin_angle);
 	// calcul de step et sideDist
-	int stepX, stepY;
-	float sideDistX, sideDistY;
-	if (rayDirX < 0)
+	if (ray->cos_angle < 0)
 	{
-		stepX = -1;
-		sideDistX = (player->x / BLOCK - mapX) * deltaDistX;
+		ray->stepX = -1;
+		ray->sideDistX = (player->x / BLOCK - ray->map_x) * ray->deltaDistX;
 	}
 	else
 	{
-		stepX = 1;
-		sideDistX = (mapX + 1.0 - player->x / BLOCK) * deltaDistX;
+		ray->stepX = 1;
+		ray->sideDistX = (ray->map_x + 1.0 - player->x / BLOCK) * ray->deltaDistX;
 	}
-	if (rayDirY < 0)
+	if (ray->sin_angle < 0)
 	{
-		stepY = -1;
-		sideDistY = (player->y / BLOCK - mapY) * deltaDistY;
+		ray->stepY = -1;
+		ray->sideDistY = (player->y / BLOCK - ray->map_y) * ray->deltaDistY;
 	}
 	else
 	{
-		stepY = 1;
-		sideDistY = (mapY + 1.0 - player->y / BLOCK) * deltaDistY;
+		ray->stepY = 1;
+		ray->sideDistY = (ray->map_y + 1.0 - player->y / BLOCK) * ray->deltaDistY;
 	}
 	// DDA loop
 	hit = 0;
 	while (!hit)
 	{
-		if (sideDistX < sideDistY)
+		if (ray->sideDistX < ray->sideDistY)
 		{
-			sideDistX += deltaDistX;
-			mapX += stepX;
-			*side = 0; // mur vertical (Est/Ouest)
+			ray->sideDistX += ray->deltaDistX;
+			ray->map_x += ray->stepX;
+			ray->side = 0; // mur vertical (Est/Ouest)
 		}
 		else
 		{
-			sideDistY += deltaDistY;
-			mapY += stepY;
-			*side = 1; // mur horizontal (Nord/Sud)
+			ray->sideDistY += ray->deltaDistY;
+			ray->map_y += ray->stepY;
+			ray->side = 1; // mur horizontal (Nord/Sud)
 		}
-		if (parse->map[mapY][mapX] == '1')
+		if (parse->map[ray->map_y][ray->map_x] == '1')
 			hit = 1;
 	}
-	return (parse->map[mapY][mapX]); // retourne le numéro du mur
+	return (parse->map[ray->map_y][ray->map_x]); // retourne le numéro du mur
 }

@@ -6,7 +6,7 @@
 /*   By: tnolent <tnolent@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 14:58:49 by tnolent           #+#    #+#             */
-/*   Updated: 2025/09/09 10:05:02 by tnolent          ###   ########.fr       */
+/*   Updated: 2025/09/12 11:39:32 by tnolent          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,10 @@
 # define A 97
 # define S 115
 # define D 100
+# define EAST 3
+# define WEST 2
+# define SOUTH 1
+# define NORTH 0
 # define ECHAP 65307
 # define LEFT 65361
 # define RIGHT 65363
@@ -38,6 +42,30 @@
 # ifndef DEBUG
 #  define DEBUG 0
 # endif
+
+typedef struct s_ray
+{
+	float		corrected_dist;
+	float		deltaDistX;
+	float		deltaDistY;
+	float		cos_angle;
+	float		sin_angle;
+	float		ray_x;
+	float		ray_y;
+	float		dist;
+	float		height;
+	int			start_y;
+	int			end;
+	int			side;
+	int			color;
+	int			index;
+	int			map_x;
+	int			map_y;
+	int			stepX;
+	int			stepY;
+	float		sideDistX;
+	float		sideDistY;
+}				t_ray;
 
 typedef struct s_player
 {
@@ -59,7 +87,23 @@ typedef struct s_cimg
 	int			bits_per_pixel;
 	int			line_length;
 	int			endian;
+	int			width;
+	int			height;
 }				t_cimg;
+
+typedef struct s_pixel
+{
+	float		wall_x;
+	int			face;
+	int			tex_x;
+	int			tex_y;
+	float		step;
+	float		tex_pos;
+	int			color;
+	int			start_y;
+	int			end_y;
+	int			y;
+}				t_pixel;
 
 typedef struct s_parse
 {
@@ -68,15 +112,7 @@ typedef struct s_parse
 	void		*mlx;
 	void		*win;
 	t_cimg		img;
-	t_cimg		*img_ptr;
-	// void		*img;
-	// char		*addr;
-	// int			bits_per_pixel;
-	// int			line_length;
-	// int			endian;
-	int			**textures;
-	int			tex_w;
-	int			tex_h;
+	t_cimg		texture[4];
 }				t_parse;
 
 void			move_player(t_player *player);
@@ -95,9 +131,8 @@ bool			touch(float px, float py, t_parse *parse);
 float			fixed_dist(float x1, float y1, float x2, float y2,
 					t_parse *parse);
 float			distance(float x, float y);
-void	draw_square(int x, int y, int size, int color, t_cimg *image);
-int				cast_ray(t_parse *parse, t_player *player, float rayDirX,
-					float rayDirY, int *side);
+void			draw_square(int x, int y, int size, int color, t_cimg *image);
+int				cast_ray(t_parse *parse, t_player *player, t_ray *ray);
 
 /*--------------------------PARSING-------------------------------*/
 void			draw_map(t_parse *parse, t_cimg *image);
