@@ -6,13 +6,15 @@
 /*   By: tnolent <tnolent@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 14:58:49 by tnolent           #+#    #+#             */
-/*   Updated: 2025/09/12 15:54:34 by tnolent          ###   ########.fr       */
+/*   Updated: 2025/09/17 15:52:16 by tnolent          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CUB3D_H
 # define CUB3D_H
 
+# include "get_next_line.h"
+# include "libft.h"
 # include "mlx.h"
 # include "mlx_int.h"
 # include <math.h>
@@ -39,17 +41,28 @@
 # define RIGHT 65363
 # define BLOCK 64
 
-# ifndef DEBUG
-#  define DEBUG 0
-# endif
+# define BONUS 0
+# define SPEED 2
+# define ANGLE_SPEED 0.02
+
+# define ERR_MALLOC "AIIIIII le malloc a pete"
+
+enum			e_output
+{
+	SUCCESS = 0,
+	FAILURE = 1,
+	ERR = 2,
+	BREAK = 3,
+	CONTINUE = 4
+};
 
 typedef struct s_ray
 {
 	float		corrected_dist;
 	float		ray_dir_x;
 	float		ray_dir_y;
-	float		deltaDistX;
-	float		deltaDistY;
+	float		delta_dx;
+	float		delta_dy;
 	float		cos_angle;
 	float		sin_angle;
 	float		pos_x;
@@ -63,11 +76,34 @@ typedef struct s_ray
 	int			index;
 	int			map_x;
 	int			map_y;
-	int			stepX;
-	int			stepY;
-	float		sideDistX;
-	float		sideDistY;
+	int			stepx;
+	int			stepy;
+	int			rev_screen;
+	float		side_dx;
+	float		side_dy;
 }				t_ray;
+
+typedef struct s_pixel
+{
+	float		wall_x;
+	int			face;
+	int			tex_x;
+	int			tex_y;
+	float		step;
+	float		tex_pos;
+	int			color;
+	int			start_y;
+	int			end_y;
+	int			y;
+}				t_pixel;
+
+typedef struct s_index
+{
+	int			i;
+	int			j;
+	int			k;
+	float		start_x;
+}				t_index;
 
 typedef struct s_player
 {
@@ -93,60 +129,80 @@ typedef struct s_cimg
 	int			height;
 }				t_cimg;
 
-typedef struct s_pixel
+typedef struct s_texinfo
 {
-	float		wall_x;
-	int			face;
-	int			tex_x;
-	int			tex_y;
-	float		step;
-	float		tex_pos;
-	int			color;
-	int			start_y;
-	int			end_y;
-	int			y;
-}				t_pixel;
+	char			*north;
+	char			*south;
+	char			*west;
+	char			*east;
+	int				*floor;
+	int				*ceiling;
+	unsigned long	hex_floor;
+	unsigned long	hex_ceiling;
+	int				size;
+	int				index;
+	double			step;
+	double			pos;
+	int				x;
+	int				y;
+}	t_texinfo;
 
-typedef struct s_parse
+typedef struct s_mapinfo
+{
+	int			fd;
+	int			nb_line;
+	char		*path;
+	char		**file;
+	int			height;
+	int			width;
+	int			index_end_of_map;
+}				t_mapinfo;
+
+typedef struct s_game
 {
 	t_player	player;
 	char		**map;
 	void		*mlx;
 	void		*win;
+	char		**textures;
 	t_cimg		img;
 	t_cimg		texture[4];
-}				t_parse;
+	t_mapinfo	mapinfo;
+	t_texinfo	texinfo;
+}				t_game;
+
+/*--------------------------PARSING-------------------------------*/
+int				parse_args(char *file, t_game *game);
+void			draw_map(t_game *parse, t_cimg *image);
+char			**get_map(void);
+int				open_file(char *file);
+// int				analyse_line(char *line, t_check *check);
+int				verify_extension(char *file);
+void			verify_file(int fd);
 
 /*-------------------------GAME------------------------------------*/
-int	draw_loop(t_parse *parse);
-void	draw_line(t_player *player, t_parse *parse, float start_x, int i,
-		t_cimg *image);
+int				draw_loop(t_game *parse);
+void			draw_line(t_player *player, t_game *parse, t_index *index,
+					t_cimg *image);
 
 /*-----------------------PLAYER----------------------------------*/
 
 void			move_player(t_player *player);
-int				key_press(int keycode, t_parse *parse);
+int				key_press(int keycode, t_game *parse);
 void			init_player(t_player *player);
 int				key_release(int keycode, t_player *player);
 
 /*-------------------------------HOOK-------------------------*/
-void			destroy_win(t_parse *parse);
-int				close_window(t_parse *parse);
-int				key_hook(int keycode, t_parse *parse);
+void			destroy_win(t_game *parse);
+int				close_window(t_game *parse);
+int				key_hook(int keycode, t_game *parse);
 
 /*-------------------------------FORMULE MATH-------------------*/
-
-bool			touch(float px, float py, t_parse *parse);
-float			fixed_dist(float x1, float y1, float x2, float y2,
-					t_parse *parse);
-float			distance(float x, float y);
-void			draw_square(int x, int y, int size, int color, t_cimg *image);
+bool			touch(float px, float py, t_game *parse);
+float			fixed_dist(float delta_x, float delta_y, t_game *parse);
+void			draw_square(int x, int y, int size, t_cimg *image);
 int				find_face(t_ray *ray);
-int				cast_ray(t_parse *parse, t_player *player, t_ray *ray);
-
-/*--------------------------PARSING-------------------------------*/
-void			draw_map(t_parse *parse, t_cimg *image);
-char			**get_map(void);
+int				cast_ray(t_game *parse, t_player *player, t_ray *ray);
 
 /*--------------------------MLX TOOLS MODIF------------------------------*/
 void			clear_image(t_cimg *img);
@@ -155,17 +211,31 @@ void			put_pixel(int x, int y, int color, t_cimg *img);
 
 /*-------------------------INIT------------------------------------------*/
 void			init_img_clean(t_cimg *img);
-void			init_texture_img(t_parse *parse, t_cimg *image, char *path);
-void			init_img(t_parse *parse, t_cimg *image);
+void			init_texture_img(t_game *parse, t_cimg *image, char *path);
+void			init_img(t_game *parse, t_cimg *image);
 void			init_tex(t_pixel *tex, t_ray *ray);
-void			init_mlx(t_parse *parse);
+void			init_mlx(t_game *parse);
+void			init_ray(t_ray *ray, t_player *player, float start_x, int x);
+void			init_mapinfo(t_mapinfo *mapinfo);
+void			init_index(t_index *index);
+// void			init_check(t_check *check);
 
 /*-------------------------SET STRUCT------------------------------------------*/
-void			set_texture(t_parse *parse, t_ray *ray, t_player *player,
+void			set_texture(t_game *parse, t_ray *ray, t_player *player,
 					t_pixel *tex);
-void			set_mlx(t_parse *parse);
+void			set_mlx(t_game *parse);
 
 /*---------------------------HANDLE IMAGES-----------------------------------*/
-void			load_img(t_parse *parse, t_cimg *texture, char *str);
+void			load_img(t_game *parse, t_cimg *texture, char *str);
+void			get_color_pixel(t_pixel *tex, t_game *parse);
+
+/*--------------------------ERROR-MSG-----------------------------------------*/
+int				err_msg(char *str, int code);
+
+/*--------------------------BONUS-------------------------------------------*/
+void			minimap(t_game *parse, t_cimg *image, t_player *player);
+
+/*------------------------FREE-SHIT-----------------------------------------*/
+void			free_tab(void **tab);
 
 #endif

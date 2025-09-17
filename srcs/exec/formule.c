@@ -6,13 +6,13 @@
 /*   By: tnolent <tnolent@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/05 15:47:19 by tnolent           #+#    #+#             */
-/*   Updated: 2025/09/12 15:52:02 by tnolent          ###   ########.fr       */
+/*   Updated: 2025/09/15 15:29:12 by tnolent          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-bool	touch(float px, float py, t_parse *parse)
+bool	touch(float px, float py, t_game *parse)
 {
 	int	x;
 	int	y;
@@ -24,26 +24,22 @@ bool	touch(float px, float py, t_parse *parse)
 	return (false);
 }
 
-float	fixed_dist(float x1, float y1, float x2, float y2, t_parse *parse)
+float	fixed_dist(float delta_x, float delta_y, t_game *parse)
 {
-	float	delta_x;
-	float	delta_y;
 	float	angle;
 	float	fix_dist;
 
-	// (void)parse;
-	delta_x = x2 - x1;
-	delta_y = y2 - y1;
-	// printf("[%f][%f]", delta_x, delta_y);
 	angle = atan2(delta_y, delta_x) - parse->player.angle;
 	fix_dist = sqrt(delta_x * delta_x + delta_y * delta_y) * cos(angle);
 	return (fix_dist);
 }
 
-void	draw_square(int x, int y, int size, int color, t_cimg *image)
+void	draw_square(int x, int y, int size, t_cimg *image)
 {
 	int	i;
+	int	color;
 
+	color = 255;
 	i = 0;
 	while (i < size)
 		put_pixel(x + i++, y, color, image);
@@ -58,56 +54,56 @@ void	draw_square(int x, int y, int size, int color, t_cimg *image)
 		put_pixel(x + i++, y + size, color, image);
 }
 
-int	cast_ray(t_parse *parse, t_player *player, t_ray *ray)
+static void	init_ray_dda(t_player *player, t_ray *ray)
 {
-
-	int		hit;
-
-	// position de départ (case de la grille)
 	ray->map_x = (int)(player->x / BLOCK);
 	ray->map_y = (int)(player->y / BLOCK);
-	// longueur du rayon pour traverser une case en X ou Y
-	ray->deltaDistX = fabs(1 / ray->cos_angle);
-	ray->deltaDistY = fabs(1 / ray->sin_angle);
-	// calcul de step et sideDist
+	ray->delta_dx = fabs(1 / ray->cos_angle);
+	ray->delta_dy = fabs(1 / ray->sin_angle);
 	if (ray->cos_angle < 0)
 	{
-		ray->stepX = -1;
-		ray->sideDistX = (player->x / BLOCK - ray->map_x) * ray->deltaDistX;
+		ray->stepx = -1;
+		ray->side_dx = (player->x / BLOCK - ray->map_x) * ray->delta_dx;
 	}
 	else
 	{
-		ray->stepX = 1;
-		ray->sideDistX = (ray->map_x + 1.0 - player->x / BLOCK) * ray->deltaDistX;
+		ray->stepx = 1;
+		ray->side_dx = (ray->map_x + 1.0 - player->x / BLOCK) * ray->delta_dx;
 	}
 	if (ray->sin_angle < 0)
 	{
-		ray->stepY = -1;
-		ray->sideDistY = (player->y / BLOCK - ray->map_y) * ray->deltaDistY;
+		ray->stepy = -1;
+		ray->side_dy = (player->y / BLOCK - ray->map_y) * ray->delta_dy;
 	}
 	else
 	{
-		ray->stepY = 1;
-		ray->sideDistY = (ray->map_y + 1.0 - player->y / BLOCK) * ray->deltaDistY;
+		ray->stepy = 1;
+		ray->side_dy = (ray->map_y + 1.0 - player->y / BLOCK) * ray->delta_dy;
 	}
-	// DDA loop
+}
+
+int	cast_ray(t_game *parse, t_player *player, t_ray *ray)
+{
+	int	hit;
+
+	init_ray_dda(player, ray);
 	hit = 0;
 	while (!hit)
 	{
-		if (ray->sideDistX < ray->sideDistY)
+		if (ray->side_dx < ray->side_dy)
 		{
-			ray->sideDistX += ray->deltaDistX;
-			ray->map_x += ray->stepX;
-			ray->side = 0; // mur vertical (Est/Ouest)
+			ray->side_dx += ray->delta_dx;
+			ray->map_x += ray->stepx;
+			ray->side = 0;
 		}
 		else
 		{
-			ray->sideDistY += ray->deltaDistY;
-			ray->map_y += ray->stepY;
-			ray->side = 1; // mur horizontal (Nord/Sud)
+			ray->side_dy += ray->delta_dy;
+			ray->map_y += ray->stepy;
+			ray->side = 1;
 		}
 		if (parse->map[ray->map_y][ray->map_x] == '1')
 			hit = 1;
 	}
-	return (parse->map[ray->map_y][ray->map_x]); // retourne le numéro du mur
+	return (parse->map[ray->map_y][ray->map_x]);
 }

@@ -6,34 +6,33 @@
 /*   By: tnolent <tnolent@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/05 16:01:41 by tnolent           #+#    #+#             */
-/*   Updated: 2025/09/12 15:59:03 by tnolent          ###   ########.fr       */
+/*   Updated: 2025/09/17 10:55:38 by tnolent          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-void	set_mlx(t_parse *parse)
+void	set_mlx(t_game *parse)
 {
-	// proteger les malloc
 	parse->map = get_map();
 	parse->mlx = mlx_init();
 	parse->win = mlx_new_window(parse->mlx, WIDTH, HEIGHT, "Cub3d");
 	load_img(parse, &parse->texture[0], "maps/shrek.xpm");
 	load_img(parse, &parse->texture[1], "maps/golem-clash-royal.xpm");
 	load_img(parse, &parse->texture[2], "maps/saymyame.xpm");
-	load_img(parse, &parse->texture[3], "maps/larry.xpm");
+	load_img(parse, &parse->texture[3], "maps/rider.xpm");
 }
 
-void	load_img(t_parse *parse, t_cimg *texture, char *str)
+void	load_img(t_game *parse, t_cimg *texture, char *str)
 {
 	texture->img = mlx_xpm_file_to_image(parse->mlx, str, &texture->width,
 			&texture->height);
-	// if (!texture->img)
-	// 	print_error(parse, "chargement de l'image.", -1);
+	if (!texture->img)
+		exit(0);
 	texture->addr = mlx_get_data_addr(texture->img, &texture->bits_per_pixel,
 			&texture->line_length, &texture->endian);
-	// if (!texture->addr)
-	// 	print_error(parse, "chargement de l'image.", -1);
+	if (!texture->addr)
+		exit(0);
 }
 
 void	clear_image(t_cimg *img)

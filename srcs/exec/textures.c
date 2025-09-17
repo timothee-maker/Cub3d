@@ -6,29 +6,27 @@
 /*   By: tnolent <tnolent@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/12 15:19:54 by tnolent           #+#    #+#             */
-/*   Updated: 2025/09/12 15:58:59 by tnolent          ###   ########.fr       */
+/*   Updated: 2025/09/15 15:29:12 by tnolent          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-void	set_texture(t_parse *parse, t_ray *ray, t_player *player, t_pixel *tex)
+void	set_texture(t_game *parse, t_ray *ray, t_player *player, t_pixel *tex)
 {
 	init_tex(tex, ray);
-	if (ray->side == 0) // mur vertical
-		ray->corrected_dist = (ray->map_x - player->x / 64.0f + (1 - ray->stepX)
+	if (ray->side == 0)
+		ray->corrected_dist = (ray->map_x - player->x / 64.0f + (1 - ray->stepx)
 				/ 2) / ray->ray_dir_x;
-	else // mur horizontal
-		ray->corrected_dist = (ray->map_y - player->y / 64.0f + (1 - ray->stepY)
+	else
+		ray->corrected_dist = (ray->map_y - player->y / 64.0f + (1 - ray->stepy)
 				/ 2) / ray->ray_dir_y;
-	// Calcul du point d'impact sur le mur
-	if (ray->side == 0) // mur vertical
+	if (ray->side == 0)
 		tex->wall_x = player->y / 64.0f + ray->corrected_dist * ray->ray_dir_y;
-	else // mur horizontal
+	else
 		tex->wall_x = player->x / 64.0f + ray->corrected_dist * ray->ray_dir_x;
 	tex->wall_x -= floor(tex->wall_x);
 	tex->tex_x = (int)(tex->wall_x * (float)(parse->texture[tex->face].width));
-	// Correction du flip de texture
 	if ((ray->side == 0 && ray->ray_dir_x > 0) || (ray->side == 1
 			&& ray->ray_dir_y < 0))
 		tex->tex_x = parse->texture[tex->face].width - tex->tex_x - 1;
@@ -36,7 +34,16 @@ void	set_texture(t_parse *parse, t_ray *ray, t_player *player, t_pixel *tex)
 	tex->tex_pos = (tex->start_y - HEIGHT / 2 + ray->height / 2) * tex->step;
 }
 
-
+void	get_color_pixel(t_pixel *tex, t_game *parse)
+{
+	tex->tex_y = (int)tex->tex_pos;
+	if (tex->tex_y < 0)
+		tex->tex_y = 0;
+	else if (tex->tex_y >= parse->texture[tex->face].height)
+		tex->tex_y = parse->texture[tex->face].height - 1;
+	tex->tex_pos += tex->step;
+	tex->color = get_pixel(&parse->texture[tex->face], tex->tex_x, tex->tex_y);
+}
 
 int	find_face(t_ray *ray)
 {
@@ -55,21 +62,3 @@ int	find_face(t_ray *ray)
 			return (NORTH);
 	}
 }
-
-// int	get_side_color(int side, float cos_angle, float sin_angle)
-// {
-// 	if (side == 0)
-// 	{
-// 		if (cos_angle > 0)
-// 			return (0x00FF00);
-// 		else
-// 			return (0xFF00FF);
-// 	}
-// 	else
-// 	{
-// 		if (sin_angle > 0)
-// 			return (255);
-// 		else
-// 			return (0xFF0000);
-// 	}
-// }
