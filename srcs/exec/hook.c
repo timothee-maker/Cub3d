@@ -6,7 +6,7 @@
 /*   By: tnolent <tnolent@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 10:16:50 by tnolent           #+#    #+#             */
-/*   Updated: 2025/09/15 15:29:12 by tnolent          ###   ########.fr       */
+/*   Updated: 2025/09/18 10:32:12 by tnolent          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,17 @@
 
 void	destroy_win(t_game *parse)
 {
+	mlx_destroy_image(parse->mlx, parse->texture[0].img);
+	mlx_destroy_image(parse->mlx, parse->texture[1].img);
+	mlx_destroy_image(parse->mlx, parse->texture[2].img);
+	mlx_destroy_image(parse->mlx, parse->texture[3].img);
 	mlx_destroy_window(parse->mlx, parse->win);
 	mlx_destroy_display(parse->mlx);
 	free(parse->map);
 	free(parse->mlx);
 	parse->mlx = NULL;
 	exit(0);
-}	
+}
 
 int	close_window(t_game *parse)
 {

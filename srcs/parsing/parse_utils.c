@@ -6,110 +6,53 @@
 /*   By: tnolent <tnolent@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 14:29:24 by tnolent           #+#    #+#             */
-/*   Updated: 2025/09/17 16:01:34 by tnolent          ###   ########.fr       */
+/*   Updated: 2025/09/18 11:23:51 by tnolent          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-int	open_file(char *file)
+char	*get_texture(char *path_tex, int i)
 {
-	int	fd;
-
-	fd = open(file, O_RDONLY);
-	if (fd == -1)
-		return (err_msg("Error\nCan't open file\n", 0));
-	return (fd);
-}
-
-int		verify_extension(char *file)
-{
-	int		i;
 	int		j;
-	char	extension[4];
+	int		k;
 
-	if (!file)
-		return (0);
 	j = 0;
-	i = ft_strlen(file) - 4;
-	while (i < ft_strlen(file))
-		extension[j++] = file[i++];
-	extension[j] = '\0';
-	if (strncmp(extension, ".cub", 4))
-		return (err_msg("Error\nwrong file extension, try with .cub", 0));
-	return (1);
+	while (path_tex[i] && (path_tex[i] == ' ' || path_tex[i] == '\t'
+			|| path_tex[i] == '\n'))
+		i++;
+	while (path_tex[i + j] && (path_tex[i + j] != '\n'
+			|| path_tex[i] == ' ' || path_tex[i] == '\t'))
+		j++;
+	k = j;
+	while (path_tex[k] && (path_tex[k] == ' ' || path_tex[k] == '\t'))
+		k++;
+	if (path_tex[k] && path_tex[k] != '\n')
+		return (NULL);
+	return (ft_substr(path_tex, i, j));
 }
 
-int	get_nb_lines(char *path)
+int	fill_direction_textures(t_texinfo *texinfo, char *map, int j)
 {
-	int		fd;
-	char	*line;
-	int		line_count;
-
-	line_count = 0;
-	fd = open(path, O_RDONLY);
-	if (fd < 0)
-		return (err_msg("ERREUR fd", 0));
+	if (map[j] == 'N' && map[j + 1] == 'O' && !texinfo->north)
+		texinfo->north = get_texture(map, j + 2);
+	else if (map[j] == 'S' && map[j + 1] == 'O' && !texinfo->south)
+		texinfo->south = get_texture(map, j + 2);
+	else if (map[j] == 'E' && map[j + 1] == 'A' && !texinfo->east)
+		texinfo->east = get_texture(map, j + 2);
+	else if (map[j] == 'W' && map[j + 1] == 'E' && !texinfo->west)
+		texinfo->west = get_texture(map, j + 2);
 	else
-	{
-		line = get_next_line(fd);
-		while (line != NULL)
-		{
-			line_count++;
-			free(line);
-			line = get_next_line(fd);
-		}
-		close(fd);
-	}
-	return (line_count);
-}
-
-int		fill_tab(t_game *game)
-{
-	char	*line;
-	t_index	index;
-
-	init_index(&index);
-	line = get_next_line(game->mapinfo.fd);
-	while (line != NULL)
-	{
-		game->mapinfo.file[index.i] = ft_calloc(ft_strlen(line) + 1,
-				sizeof(char));
-		if (!game->mapinfo.file[index.i])
-			return (free_tab((void **)game->mapinfo.file), err_msg(ERR_MALLOC, 0));
-		while (line[index.k] != '\0')
-			game->mapinfo.file[index.i][index.j++] = line[index.k++];
-		game->mapinfo.file[index.i++][index.j] = '\0';
-		index.j = 0;
-		index.k = 0;
-		free(line);
-		line = get_next_line(game->mapinfo.fd);
-	}
-	game->mapinfo.file[index.i] = NULL;
-	return (1);
-}
-
-int	parse_data(char *path, t_game *game)
-{
-	game->mapinfo.nb_line = get_nb_lines(path);
-	if (game->mapinfo.nb_line == -1)
 		return (0);
-	game->mapinfo.path = path;
-	game->mapinfo.file = ft_calloc(game->mapinfo.nb_line + 1, sizeof(char *));
-	if (!(game->mapinfo.file))
-		return (err_msg(ERR_MALLOC, 0));
-	game->mapinfo.fd = open_file(path);
-	if (game->mapinfo.fd < 0)
-		return (err_msg("ERREUR fd", 0));
-	if (!fill_tab(game))
-		return (close(game->mapinfo.fd), 0);
-	close(game->mapinfo.fd);
+	printf("%s\n", texinfo->north);
+	printf("%s\n", texinfo->south);
+	printf("%s\n", texinfo->east);
+	printf("%s\n", texinfo->west);
 	return (1);
 }
 
-static int	ignore_whitespaces_get_info(t_game *game, char **map, int i, int j)
+static int	get_text_map(t_game *game, char **map, int i, int j)
 {
-	(void)game;
 	while (map[i][j] == ' ' || map[i][j] == '\t' || map[i][j] == '\n')
 		j++;
 	if (ft_isprint(map[i][j]) && !ft_isdigit(map[i][j]))
@@ -117,48 +60,50 @@ static int	ignore_whitespaces_get_info(t_game *game, char **map, int i, int j)
 		if (map[i][j + 1] && ft_isprint(map[i][j + 1])
 			&& !ft_isdigit(map[i][j]))
 		{
-			// if (fill_direction_textures(&game->texinfo, map[i], j) == ERR)
-			// 	return (err_msg("texture invalide", FAILURE));
-			return (BREAK);
-		}	
+			if (!fill_direction_textures(&game->texinfo, map[i], j))
+				return (err_msg("texture invalide", 0));
+			return (2);
+		}
 		else
 		{
 			// if (fill_color_textures(game, &game->texinfo, map[i], j) == ERR)
-			// 	return (FAILURE);
-			return (BREAK);
-		}	
+			// 	return (0);
+			return (2);
+		}
 	}
 	else if (ft_isdigit(map[i][j]))
 	{
-		// if (create_map(game, map, i) == FAILURE)
-		// 	return (err_msg("invalid map", FAILURE));
-		return (SUCCESS);
+		// if (!create_map(game, map, i))
+		// 	return (err_msg("invalid map", 0));
+		return (0);
 	}
-	return (CONTINUE);
+	return (4);
 }
 
 int	get_file_data(t_game *game, char **map)
 {
-	t_index index;
+	t_index	index;
 
 	init_index(&index);
+	if (!map || !*map)
+		return (0);
 	while (map[index.i])
 	{
 		index.j = 0;
 		while (map[index.i][index.j])
 		{
-			index.k = ignore_whitespaces_get_info(game, map, index.i, index.j);
-			if (index.k == BREAK)
+			index.k = get_text_map(game, map, index.i, index.j);
+			if (index.k == 2)
 				break ;
-			else if (index.k == FAILURE)
-				return (FAILURE);
-			else if (index.k == SUCCESS)
-				return (SUCCESS);
+			else if (index.k == 0)
+				return (0);
+			else if (index.k == 1)
+				return (1);
 			index.j++;
 		}
 		index.i++;
 	}
-	return (SUCCESS);
+	return (1);
 }
 
 int	parse_args(char *file, t_game *game)
@@ -166,6 +111,8 @@ int	parse_args(char *file, t_game *game)
 	if (!verify_extension(file))
 		return (0);
 	if (!parse_data(file, game))
+		return (0);
+	if (!get_file_data(game, game->map))
 		return (0);
 	return (1);
 }

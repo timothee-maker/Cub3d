@@ -6,7 +6,7 @@
 /*   By: tnolent <tnolent@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 18:41:48 by tnolent           #+#    #+#             */
-/*   Updated: 2025/09/17 15:54:38 by tnolent          ###   ########.fr       */
+/*   Updated: 2025/09/18 11:46:44 by tnolent          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,7 @@ char	*read_file(int fd, char *stash)
 			break ;
 		}
 		if (bytes != 0)
-			stash = ft_strjoin(stash, buffer);
+			stash = ft_strjoin_custom(stash, buffer);
 		if (ft_strchr(stash, '\n') || bytes < BUFFER_SIZE)
 			break ;
 	}

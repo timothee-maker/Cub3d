@@ -6,7 +6,7 @@
 /*   By: tnolent <tnolent@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 14:24:26 by tnolent           #+#    #+#             */
-/*   Updated: 2025/09/17 15:59:49 by tnolent          ###   ########.fr       */
+/*   Updated: 2025/09/18 10:48:23 by tnolent          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,18 +65,18 @@
 // 	i = 0;
 // 	while (line[i])
 // 	{
-// 		if (line[i] == 'N' && line[i + 1] == 'O')
-// 			check->NO = 1;
-// 		else if (line[i] == 'S' && line[i + 1] == 'O')
-// 			check->SO = 1;
-// 		else if (line[i] == 'E' && line[i + 1] == 'A')
-// 			check->EA = 1;
-// 		else if (line[i] == 'W' && line[i + 1] == 'E')
-// 			check->WE = 1;
-// 		else if (line[i] == 'C')
-// 			check->C = 1;
-// 		else if (line[i] == 'F')
-// 			check->F = 1;
+		// if (line[i] == 'N' && line[i + 1] == 'O')
+		// 	check->NO = 1;
+		// else if (line[i] == 'S' && line[i + 1] == 'O')
+		// 	check->SO = 1;
+		// else if (line[i] == 'E' && line[i + 1] == 'A')
+		// 	check->EA = 1;
+		// else if (line[i] == 'W' && line[i + 1] == 'E')
+		// 	check->WE = 1;
+		// else if (line[i] == 'C')
+		// 	check->C = 1;
+		// else if (line[i] == 'F')
+		// 	check->F = 1;
 // 		i++;
 // 	}
 // 	if (is_check(check))

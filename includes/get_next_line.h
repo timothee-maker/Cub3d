@@ -6,7 +6,7 @@
 /*   By: tnolent <tnolent@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 18:59:49 by tnolent           #+#    #+#             */
-/*   Updated: 2025/09/17 14:48:32 by tnolent          ###   ########.fr       */
+/*   Updated: 2025/09/18 11:47:44 by tnolent          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,5 +28,6 @@ char	*clean_stash(char *stash);
 char	*read_file(int fd, char *buffer);
 char	*keep_line(char *stash);
 char	*get_next_line(int fd);
+char	*ft_strjoin_custom(char const *s1, char const *s2);
 
 #endif
