@@ -6,26 +6,27 @@
 /*   By: tnolent <tnolent@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/05 16:01:41 by tnolent           #+#    #+#             */
-/*   Updated: 2025/09/17 10:55:38 by tnolent          ###   ########.fr       */
+/*   Updated: 2025/09/23 16:12:07 by tnolent          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-void	set_mlx(t_game *parse)
+void	set_mlx(t_game *game)
 {
-	parse->map = get_map();
-	parse->mlx = mlx_init();
-	parse->win = mlx_new_window(parse->mlx, WIDTH, HEIGHT, "Cub3d");
-	load_img(parse, &parse->texture[0], "maps/shrek.xpm");
-	load_img(parse, &parse->texture[1], "maps/golem-clash-royal.xpm");
-	load_img(parse, &parse->texture[2], "maps/saymyame.xpm");
-	load_img(parse, &parse->texture[3], "maps/rider.xpm");
+	game->map = get_map();
+	game->mlx = mlx_init();
+	game->win = mlx_new_window(game->mlx, WIDTH, HEIGHT, "Cub3d");
+	load_img(game, &game->texture[0], game->texinfo.north);
+	load_img(game, &game->texture[1], game->texinfo.south);
+	load_img(game, &game->texture[2], game->texinfo.east);
+	load_img(game, &game->texture[3], game->texinfo.west);
+	free_tex(&game->texinfo);
 }
 
-void	load_img(t_game *parse, t_cimg *texture, char *str)
+void	load_img(t_game *game, t_cimg *texture, char *str)
 {
-	texture->img = mlx_xpm_file_to_image(parse->mlx, str, &texture->width,
+	texture->img = mlx_xpm_file_to_image(game->mlx, str, &texture->width,
 			&texture->height);
 	if (!texture->img)
 		exit(0);

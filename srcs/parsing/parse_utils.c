@@ -6,52 +6,71 @@
 /*   By: tnolent <tnolent@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 14:29:24 by tnolent           #+#    #+#             */
-/*   Updated: 2025/09/18 11:23:51 by tnolent          ###   ########.fr       */
+/*   Updated: 2025/09/23 16:33:02 by tnolent          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-char	*get_texture(char *path_tex, int i)
-{
-	int		j;
-	int		k;
+// int	fill_map(t_game *game, char **map, int start, int end, int biggest)
+// {
+// 	int	i;
+// 	int	j;
 
-	j = 0;
-	while (path_tex[i] && (path_tex[i] == ' ' || path_tex[i] == '\t'
-			|| path_tex[i] == '\n'))
-		i++;
-	while (path_tex[i + j] && (path_tex[i + j] != '\n'
-			|| path_tex[i] == ' ' || path_tex[i] == '\t'))
-		j++;
-	k = j;
-	while (path_tex[k] && (path_tex[k] == ' ' || path_tex[k] == '\t'))
-		k++;
-	if (path_tex[k] && path_tex[k] != '\n')
-		return (NULL);
-	return (ft_substr(path_tex, i, j));
+// 	i = 0;
+// 	while (start < end)
+// 	{
+// 		game->map[i] = malloc(sizeof(char) * biggest + 1);
+
+// 	}
+// }
+
+int	create_map(t_game *game, char **map, int i)
+{
+	int	j;
+	int	k;
+	int	flag;
+	int	biggest;
+
+	flag = 0;
+	j = i;
+	while (map[j])
+	{
+		if (ft_strlen(map[j]) > biggest)
+			biggest = ft_strlen(map[j]);
+		k = -1;
+		while (map[j][++k])
+		{
+			if (!ft_isdigit(map[j][k]) && map[j][k] != ' ' && map[j][k] != '\t'
+				&& map[j][k] != '\n')
+			{
+				if (map[j][k] == 'N' && !flag)
+					flag = 1;
+				else
+					return (0);
+			}
+			if (empty_line(map, j, k++))
+				break ;
+		}
+		if (empty_line(map, j++, k))
+			break ;
+	}
+	game->mapinfo.index_end_of_map = j;
+	while (map[j])
+	{
+		if (!empty_line(map, j++, k))
+			return (0);
+	}
+	// ALLER BAPTISTE JE CROIS EN TOIT
+	// game->map = malloc(sizeof(char *) * j - i + 1);
+	// if (!game->map)
+	// 	return (0);
+	// if (!fill_map(game, map, i, j, biggest))
+	// 	return (0);
+	return (2);
 }
 
-int	fill_direction_textures(t_texinfo *texinfo, char *map, int j)
-{
-	if (map[j] == 'N' && map[j + 1] == 'O' && !texinfo->north)
-		texinfo->north = get_texture(map, j + 2);
-	else if (map[j] == 'S' && map[j + 1] == 'O' && !texinfo->south)
-		texinfo->south = get_texture(map, j + 2);
-	else if (map[j] == 'E' && map[j + 1] == 'A' && !texinfo->east)
-		texinfo->east = get_texture(map, j + 2);
-	else if (map[j] == 'W' && map[j + 1] == 'E' && !texinfo->west)
-		texinfo->west = get_texture(map, j + 2);
-	else
-		return (0);
-	printf("%s\n", texinfo->north);
-	printf("%s\n", texinfo->south);
-	printf("%s\n", texinfo->east);
-	printf("%s\n", texinfo->west);
-	return (1);
-}
-
-static int	get_text_map(t_game *game, char **map, int i, int j)
+int	get_text_map(t_game *game, char **map, int i, int j)
 {
 	while (map[i][j] == ' ' || map[i][j] == '\t' || map[i][j] == '\n')
 		j++;
@@ -60,22 +79,22 @@ static int	get_text_map(t_game *game, char **map, int i, int j)
 		if (map[i][j + 1] && ft_isprint(map[i][j + 1])
 			&& !ft_isdigit(map[i][j]))
 		{
-			if (!fill_direction_textures(&game->texinfo, map[i], j))
+			if (!fill_wall_textures(&game->texinfo, map[i], j))
 				return (err_msg("texture invalide", 0));
 			return (2);
 		}
 		else
 		{
-			// if (fill_color_textures(game, &game->texinfo, map[i], j) == ERR)
-			// 	return (0);
+			if (!fill_view_texture(&game->texinfo, map[i], j))
+				return (0);
 			return (2);
 		}
 	}
 	else if (ft_isdigit(map[i][j]))
 	{
-		// if (!create_map(game, map, i))
-		// 	return (err_msg("invalid map", 0));
-		return (0);
+		if (!create_map(game, map, i))
+			return (err_msg("invalid map", 0));
+		return (1);
 	}
 	return (4);
 }
@@ -112,7 +131,10 @@ int	parse_args(char *file, t_game *game)
 		return (0);
 	if (!parse_data(file, game))
 		return (0);
-	if (!get_file_data(game, game->map))
+	if (!get_file_data(game, game->mapinfo.file))
 		return (0);
+	if (!verify_access(&game->texinfo))
+		return (free_tex(&game->texinfo), 0);
+	// free_tab((void **)game->mapinfo.file);
 	return (1);
 }

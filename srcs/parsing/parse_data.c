@@ -6,7 +6,7 @@
 /*   By: tnolent <tnolent@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/18 10:40:38 by tnolent           #+#    #+#             */
-/*   Updated: 2025/09/18 11:36:47 by tnolent          ###   ########.fr       */
+/*   Updated: 2025/09/18 11:59:31 by tnolent          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,8 +84,8 @@ int	fill_tab(t_game *game)
 		free(line);
 		line = get_next_line(game->mapinfo.fd);
 	}
-	game->mapinfo.file[index.i] = NULL;
-	return (1);
+    free(line);
+	return (game->mapinfo.file[index.i] = NULL, 1);
 }
 
 int	parse_data(char *path, t_game *game)

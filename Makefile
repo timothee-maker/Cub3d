@@ -8,11 +8,11 @@ OBJS	= $(patsubst srcs/%.c, objs/%.o, $(SRCS))
 DEPS	= $(wildcard includes/*.h)
 
 SRCS_FILES = exec/main exec/player exec/hook exec/formule exec/parsing exec/mlx_utils \
-			 exec/init_mlx exec/textures exec/cub exec/init_game exec/free\
+			 exec/init_mlx exec/textures exec/cub exec/init_game \
 			 gnl/get_next_line gnl/get_next_line_utils \
 			 parsing/find_error parsing/parse_utils parsing/init_parse \
-			 parsing/parse_data\
-			 utils
+			 parsing/parse_data parsing/floor_ceiling parsing/textures\
+			 utils free
 SRCS := $(addprefix srcs/, $(addsuffix .c, $(SRCS_FILES)))
 
 all: $(NAME)
