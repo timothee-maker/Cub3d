@@ -6,16 +6,30 @@
 /*   By: tnolent <tnolent@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/01 10:37:28 by tnolent           #+#    #+#             */
-/*   Updated: 2025/09/12 16:28:28 by tnolent          ###   ########.fr       */
+/*   Updated: 2025/09/25 11:33:47 by tnolent          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-void	init_player(t_player *player)
+void	set_player(t_player *player, t_game *game)
 {
+	for (int y = 0; game->map[y]; y++)
+	{
+		for (int x = 0; game->map[y][x]; x++)
+		{
+			if (game->map[y][x] == 'N' || game->map[y][x] == 'S'
+				|| game->map[y][x] == 'E' || game->map[y][x] == 'W')
+			{
+				player->x = x + 0.5;
+				player->y = y + 0.5;
+			}
+		}
+	}
+	// printf("[%f][%f]\n", player->x * 64, player->y * 64);
 	player->x = WIDTH / 2;
 	player->y = HEIGHT / 2;
+	// printf("[%f][%f]\n", player->x, player->y);
 	player->angle = PI * 1.5;
 	player->k_up = false;
 	player->k_down = false;

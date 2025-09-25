@@ -6,7 +6,7 @@
 /*   By: tnolent <tnolent@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 14:58:49 by tnolent           #+#    #+#             */
-/*   Updated: 2025/09/23 16:29:59 by tnolent          ###   ########.fr       */
+/*   Updated: 2025/09/25 11:33:56 by tnolent          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,10 +42,10 @@
 # define BLOCK 64
 # define INT_MAX 2147483647
 # define INT_MIN -2147483647
+# define SPEED 2
+# define ANGLE_SPEED 0.02
 
 # define BONUS 0
-# define SPEED 5
-# define ANGLE_SPEED 0.02
 
 # define ERR_MALLOC "AIIIIII le malloc a pete"
 
@@ -140,7 +140,8 @@ typedef struct s_mapinfo
 	char		**file;
 	int			height;
 	int			width;
-	int			index_end_of_map;
+	int			end_of_map;
+	int			start_of_map;
 }				t_mapinfo;
 
 typedef struct s_game
@@ -172,7 +173,7 @@ int				fill_view_texture(t_texinfo *texinfo, char *map, int j);
 char			*get_texture(char *path_tex, int i);
 int				fill_wall_textures(t_texinfo *texinfo, char *map, int j);
 int				empty_line(char **map, int j, int i);
-int	verify_access(t_texinfo *texture);
+int				verify_access(t_texinfo *texture);
 
 /*-------------------------GAME------------------------------------*/
 int				draw_loop(t_game *parse);
@@ -183,7 +184,7 @@ void			draw_line(t_player *player, t_game *parse, t_index *index,
 
 void			move_player(t_player *player);
 int				key_press(int keycode, t_game *parse);
-void			init_player(t_player *player);
+void			set_player(t_player *player, t_game *game);
 int				key_release(int keycode, t_player *player);
 
 /*-------------------------------HOOK-------------------------*/

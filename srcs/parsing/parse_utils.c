@@ -6,24 +6,28 @@
 /*   By: tnolent <tnolent@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 14:29:24 by tnolent           #+#    #+#             */
-/*   Updated: 2025/09/23 16:33:02 by tnolent          ###   ########.fr       */
+/*   Updated: 2025/09/25 10:55:45 by tnolent          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-// int	fill_map(t_game *game, char **map, int start, int end, int biggest)
-// {
-// 	int	i;
-// 	int	j;
+int	fill_map(t_game *game, char **map, int start)
+{
+	int	i;
+	int	end;
 
-// 	i = 0;
-// 	while (start < end)
-// 	{
-// 		game->map[i] = malloc(sizeof(char) * biggest + 1);
-
-// 	}
-// }
+	end = game->mapinfo.end_of_map - 1;
+	i = 0;
+	while (start < end)
+	{
+		game->map[i] = ft_strdup(map[start++]);
+		if (!game->map[i++])
+			return (free_tab((void *)map), 0);
+	}
+	game->map[i] = NULL;
+	return (1);
+}
 
 int	create_map(t_game *game, char **map, int i)
 {
@@ -32,8 +36,10 @@ int	create_map(t_game *game, char **map, int i)
 	int	flag;
 	int	biggest;
 
+	game->mapinfo.start_of_map = i;
 	flag = 0;
 	j = i;
+	biggest = 0;
 	while (map[j])
 	{
 		if (ft_strlen(map[j]) > biggest)
@@ -44,29 +50,31 @@ int	create_map(t_game *game, char **map, int i)
 			if (!ft_isdigit(map[j][k]) && map[j][k] != ' ' && map[j][k] != '\t'
 				&& map[j][k] != '\n')
 			{
-				if (map[j][k] == 'N' && !flag)
+				if (ft_strchr("NSEW" ,map[j][k]) && !flag)
 					flag = 1;
 				else
 					return (0);
 			}
-			if (empty_line(map, j, k++))
+			if (empty_line(map, j, k))
 				break ;
 		}
 		if (empty_line(map, j++, k))
 			break ;
 	}
-	game->mapinfo.index_end_of_map = j;
+	game->mapinfo.end_of_map = j;
 	while (map[j])
 	{
 		if (!empty_line(map, j++, k))
 			return (0);
 	}
 	// ALLER BAPTISTE JE CROIS EN TOIT
-	// game->map = malloc(sizeof(char *) * j - i + 1);
-	// if (!game->map)
-	// 	return (0);
-	// if (!fill_map(game, map, i, j, biggest))
-	// 	return (0);
+	game->map = malloc(sizeof(char *) * game->mapinfo.end_of_map - i + 1);
+	if (!game->map)
+		return (0);
+	if (!fill_map(game, map, i))
+		return (0);
+	// for (int l = 0;  game->map[l]; l++)
+	// 	printf("%s", game->map[l]);
 	return (2);
 }
 

@@ -6,7 +6,7 @@
 /*   By: tnolent <tnolent@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/05 16:01:41 by tnolent           #+#    #+#             */
-/*   Updated: 2025/09/23 16:12:07 by tnolent          ###   ########.fr       */
+/*   Updated: 2025/09/25 11:26:35 by tnolent          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	set_mlx(t_game *game)
 {
-	game->map = get_map();
+	set_player(&game->player, game);
 	game->mlx = mlx_init();
 	game->win = mlx_new_window(game->mlx, WIDTH, HEIGHT, "Cub3d");
 	load_img(game, &game->texture[0], game->texinfo.north);

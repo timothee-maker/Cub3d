@@ -6,7 +6,7 @@
 /*   By: tnolent <tnolent@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/08 12:57:36 by tnolent           #+#    #+#             */
-/*   Updated: 2025/09/18 13:14:39 by tnolent          ###   ########.fr       */
+/*   Updated: 2025/09/25 11:26:20 by tnolent          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,21 +14,20 @@
 
 
 
-void	init_mlx(t_game *parse)
+void	init_mlx(t_game *game)
 {
-	parse->mlx = NULL;
-	parse->win = NULL;
-	init_player(&parse->player);
-	parse->map = NULL;
-	init_mapinfo(&parse->mapinfo);
-	init_texinfo(&parse->texinfo);
+	game->mlx = NULL;
+	game->win = NULL;
+	game->map = NULL;
+	init_mapinfo(&game->mapinfo);
+	init_texinfo(&game->texinfo);
 }
 
-void	init_texture_img(t_game *parse, t_cimg *image, char *path)
+void	init_texture_img(t_game *game, t_cimg *image, char *path)
 {
 	init_img_clean(image);
-	image->img = mlx_xpm_file_to_image(parse->mlx, path, &parse->img.width,
-			&parse->img.height);
+	image->img = mlx_xpm_file_to_image(game->mlx, path, &game->img.width,
+			&game->img.height);
 	if (image->img == NULL)
 		exit(0);
 	image->addr = mlx_get_data_addr(image->img, &image->bits_per_pixel,
@@ -45,10 +44,10 @@ void	init_img_clean(t_cimg *img)
 	img->endian = 0;
 }
 
-void	init_img(t_game *parse, t_cimg *image)
+void	init_img(t_game *game, t_cimg *image)
 {
 	init_img_clean(image);
-	image->img = mlx_new_image(parse->mlx, WIDTH, HEIGHT);
+	image->img = mlx_new_image(game->mlx, WIDTH, HEIGHT);
 	if (image->img == NULL)
 		exit(0);
 	image->addr = mlx_get_data_addr(image->img, &image->bits_per_pixel,
