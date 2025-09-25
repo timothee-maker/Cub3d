@@ -6,7 +6,7 @@
 /*   By: tnolent <tnolent@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/12 15:53:37 by tnolent           #+#    #+#             */
-/*   Updated: 2025/09/25 11:34:10 by tnolent          ###   ########.fr       */
+/*   Updated: 2025/09/25 11:36:35 by tnolent          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,17 +27,20 @@ void	draw_line(t_player *player, t_game *parse, t_index *index,
 	cast_ray(parse, player, &ray);
 	set_parameters(&ray, player, parse);
 	set_texture(parse, &ray, player, &tex);
-	while (++ray.index < HEIGHT)
+	if (!BONUS)
 	{
-		if (ray.index < ray.start_y)
-			put_pixel(ray.rev_screen, ray.index, 0xADD8E6, image);
-		else if (ray.index < ray.end)
+		while (++ray.index < HEIGHT)
 		{
-			get_color_pixel(&tex, parse);
-			put_pixel(ray.rev_screen, ray.index, tex.color, image);
+			if (ray.index < ray.start_y)
+				put_pixel(ray.rev_screen, ray.index, 0xADD8E6, image);
+			else if (ray.index < ray.end)
+			{
+				get_color_pixel(&tex, parse);
+				put_pixel(ray.rev_screen, ray.index, tex.color, image);
+			}
+			else
+				put_pixel(ray.rev_screen, ray.index, 0x228B22, image);
 		}
-		else
-			put_pixel(ray.rev_screen, ray.index, 0x228B22, image);
 	}
 }
 

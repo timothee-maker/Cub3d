@@ -6,7 +6,7 @@
 /*   By: tnolent <tnolent@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 14:58:49 by tnolent           #+#    #+#             */
-/*   Updated: 2025/09/25 11:33:56 by tnolent          ###   ########.fr       */
+/*   Updated: 2025/09/25 12:15:48 by tnolent          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,7 @@ typedef struct s_index
 
 typedef struct s_player
 {
+	char		dir;
 	float		x;
 	float		y;
 	float		angle;

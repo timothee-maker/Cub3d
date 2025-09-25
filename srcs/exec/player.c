@@ -6,31 +6,49 @@
 /*   By: tnolent <tnolent@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/01 10:37:28 by tnolent           #+#    #+#             */
-/*   Updated: 2025/09/25 11:33:47 by tnolent          ###   ########.fr       */
+/*   Updated: 2025/09/25 12:24:35 by tnolent          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-void	set_player(t_player *player, t_game *game)
+void	set_pos_player(t_player *player, t_game *game)
 {
-	for (int y = 0; game->map[y]; y++)
+	int	x;
+	int	y;
+
+	y = -1;
+	while (game->map[++y])
 	{
-		for (int x = 0; game->map[y][x]; x++)
+		x = -1;
+		while (game->map[y][++x])
 		{
-			if (game->map[y][x] == 'N' || game->map[y][x] == 'S'
-				|| game->map[y][x] == 'E' || game->map[y][x] == 'W')
+			if (ft_strchr("NSEW", game->map[y][x]))
 			{
-				player->x = x + 0.5;
-				player->y = y + 0.5;
+				player->dir = game->map[y][x];
+				player->x = (x + 0.5) * BLOCK;
+				player->y = (y + 0.5) * BLOCK;
 			}
 		}
 	}
-	// printf("[%f][%f]\n", player->x * 64, player->y * 64);
-	player->x = WIDTH / 2;
-	player->y = HEIGHT / 2;
-	// printf("[%f][%f]\n", player->x, player->y);
-	player->angle = PI * 1.5;
+}
+
+void	set_angle(t_player *player)
+{
+	if (player->dir == 'N')
+		player->angle = PI * 1.5;
+	if (player->dir == 'S')
+		player->angle = PI / 2;
+	if (player->dir == 'E')
+		player->angle = 0;
+	if (player->dir == 'W')
+		player->angle = PI;
+}
+
+void	set_player(t_player *player, t_game *game)
+{
+	set_pos_player(player, game);
+	set_angle(player);
 	player->k_up = false;
 	player->k_down = false;
 	player->k_left = false;
