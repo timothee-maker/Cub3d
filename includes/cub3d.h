@@ -6,17 +6,20 @@
 /*   By: tnolent <tnolent@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 14:58:49 by tnolent           #+#    #+#             */
-/*   Updated: 2025/09/25 12:15:48 by tnolent          ###   ########.fr       */
+/*   Updated: 2025/09/25 14:25:48 by tnolent          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CUB3D_H
 # define CUB3D_H
 
+# ifdef __linux__
+#  include "mlx.h"
+#  include "mlx_int.h"
+# endif
+
 # include "get_next_line.h"
 # include "libft.h"
-# include "mlx.h"
-# include "mlx_int.h"
 # include <math.h>
 # include <stdbool.h>
 # include <stdio.h>
@@ -42,7 +45,7 @@
 # define BLOCK 64
 # define INT_MAX 2147483647
 # define INT_MIN -2147483647
-# define SPEED 2
+# define SPEED 3
 # define ANGLE_SPEED 0.02
 
 # define BONUS 0
