@@ -6,7 +6,7 @@
 /*   By: tnolent <tnolent@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 14:58:49 by tnolent           #+#    #+#             */
-/*   Updated: 2025/09/25 14:25:48 by tnolent          ###   ########.fr       */
+/*   Updated: 2025/09/26 10:51:10 by tnolent          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -186,7 +186,7 @@ void			draw_line(t_player *player, t_game *parse, t_index *index,
 
 /*-----------------------PLAYER----------------------------------*/
 
-void			move_player(t_player *player);
+void			move_player(t_game *game, t_player *player);
 int				key_press(int keycode, t_game *parse);
 void			set_player(t_player *player, t_game *game);
 int				key_release(int keycode, t_player *player);

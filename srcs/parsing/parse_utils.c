@@ -6,7 +6,7 @@
 /*   By: tnolent <tnolent@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 14:29:24 by tnolent           #+#    #+#             */
-/*   Updated: 2025/09/25 14:55:51 by tnolent          ###   ########.fr       */
+/*   Updated: 2025/09/26 11:00:34 by tnolent          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ int	create_map(t_game *game, char **map, int i)
 			if (!ft_isdigit(map[j][k]) && map[j][k] != ' ' && map[j][k] != '\t'
 				&& map[j][k] != '\n')
 			{
-				if (ft_strchr("NSEW" ,map[j][k]) && !flag)
+				if (ft_strchr("NSEW", map[j][k]) && !flag)
 					flag = 1;
 				else
 					return (0);
@@ -61,20 +61,20 @@ int	create_map(t_game *game, char **map, int i)
 		if (empty_line(map, j++, k))
 			break ;
 	}
+	if (!flag)
+		return (err_msg("Miss user in map\n", 0));
 	game->mapinfo.end_of_map = j;
 	while (map[j])
 	{
 		if (!empty_line(map, j++, k))
-			return (0);
+			return (err_msg("Map is not the last element in file\n", 0));
 	}
-	// ALLER BATTISTE JE CROIS EN TOIT
+	// ici
 	game->map = malloc(sizeof(char *) * game->mapinfo.end_of_map - i + 1);
 	if (!game->map)
-		return (0);
+		return (err_msg(ERR_MALLOC, 0));
 	if (!fill_map(game, map, i))
 		return (0);
-	// for (int l = 0;  game->map[l]; l++)
-	// 	printf("%s", game->map[l]);
 	return (2);
 }
 
@@ -101,7 +101,7 @@ int	get_text_map(t_game *game, char **map, int i, int j)
 	else if (ft_isdigit(map[i][j]))
 	{
 		if (!create_map(game, map, i))
-			return (err_msg("invalid map", 0));
+			return (0);
 		return (1);
 	}
 	return (4);
@@ -143,6 +143,6 @@ int	parse_args(char *file, t_game *game)
 		return (0);
 	if (!verify_access(&game->texinfo))
 		return (free_tex(&game->texinfo), 0);
-	// free_tab((void **)game->mapinfo.file);
+	free_tab((void **)game->mapinfo.file);
 	return (1);
 }

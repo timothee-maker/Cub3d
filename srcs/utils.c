@@ -6,7 +6,7 @@
 /*   By: tnolent <tnolent@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/17 11:32:39 by tnolent           #+#    #+#             */
-/*   Updated: 2025/09/22 15:27:47 by tnolent          ###   ########.fr       */
+/*   Updated: 2025/09/25 15:17:45 by tnolent          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,12 +41,9 @@ int	ft_atoi_free(const char *str)
 
 int	err_msg(char *str, int code)
 {
-	ft_putstr_fd("cub3D: Error", 2);
+	ft_putstr_fd("cub3D: Error\n", 2);
 	if (str)
-	{
-		ft_putstr_fd(": ", 2);
 		ft_putstr_fd(str, 2);
-	}
 	return (code);
 }
 

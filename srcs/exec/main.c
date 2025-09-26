@@ -6,7 +6,7 @@
 /*   By: tnolent <tnolent@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 15:15:11 by tnolent           #+#    #+#             */
-/*   Updated: 2025/09/25 14:07:24 by tnolent          ###   ########.fr       */
+/*   Updated: 2025/09/26 10:29:13 by tnolent          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int	draw_loop(t_game *game)
 	player = &game->player;
 	index.start_x = player->angle - PI / 6;
 	fraction = PI / 3 / WIDTH;
-	move_player(player);
+	move_player(game, player);
 	if (BONUS)
 		minimap(game, &image, player);
 	index.i = 0;

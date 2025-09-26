@@ -6,7 +6,7 @@
 /*   By: tnolent <tnolent@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/12 15:19:54 by tnolent           #+#    #+#             */
-/*   Updated: 2025/09/15 15:29:12 by tnolent          ###   ########.fr       */
+/*   Updated: 2025/09/26 09:37:22 by tnolent          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void	set_texture(t_game *parse, t_ray *ray, t_player *player, t_pixel *tex)
 {
 	init_tex(tex, ray);
-	if (ray->side == 0)
+		if (ray->side == 0)
 		ray->corrected_dist = (ray->map_x - player->x / 64.0f + (1 - ray->stepx)
 				/ 2) / ray->ray_dir_x;
 	else

@@ -6,7 +6,7 @@
 /*   By: tnolent <tnolent@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/01 10:37:28 by tnolent           #+#    #+#             */
-/*   Updated: 2025/09/25 12:24:35 by tnolent          ###   ########.fr       */
+/*   Updated: 2025/09/26 10:28:53 by tnolent          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,29 +57,63 @@ void	set_player(t_player *player, t_game *game)
 	player->r_right = false;
 }
 
-void	handle_position(t_player *player, float cos_angle, float sin_angle)
+int is_wall(t_game *game, float x, float y)
 {
-	if (player->k_up)
-	{
-		player->x += cos_angle * SPEED;
-		player->y += sin_angle * SPEED;
-	}
-	if (player->k_down)
-	{
-		player->x -= cos_angle * SPEED;
-		player->y -= sin_angle * SPEED;
-	}
-	if (player->k_left)
-	{
-		player->x += sin_angle * SPEED;
-		player->y -= cos_angle * SPEED;
-	}
-	if (player->k_right)
-	{
-		player->x -= sin_angle * SPEED;
-		player->y += cos_angle * SPEED;
-	}
+    int map_x = (int)(x / BLOCK);
+    int map_y = (int)(y / BLOCK);
+
+    if (game->map[map_y][map_x] == '1')
+        return (1);
+    return (0);
 }
+
+void handle_position(t_game *game, t_player *player, float cos_angle, float sin_angle)
+{
+    float new_x;
+    float new_y;
+
+    if (player->k_up)
+    {
+        new_x = player->x + cos_angle * SPEED;
+        new_y = player->y + sin_angle * SPEED;
+        if (!is_wall(game, new_x, new_y))
+        {
+            player->x = new_x;
+            player->y = new_y;
+        }
+    }
+    if (player->k_down)
+    {
+        new_x = player->x - cos_angle * SPEED;
+        new_y = player->y - sin_angle * SPEED;
+        if (!is_wall(game, new_x, new_y))
+        {
+            player->x = new_x;
+            player->y = new_y;
+        }
+    }
+    if (player->k_left)
+    {
+        new_x = player->x + sin_angle * SPEED;
+        new_y = player->y - cos_angle * SPEED;
+        if (!is_wall(game, new_x, new_y))
+        {
+            player->x = new_x;
+            player->y = new_y;
+        }
+    }
+    if (player->k_right)
+    {
+        new_x = player->x - sin_angle * SPEED;
+        new_y = player->y + cos_angle * SPEED;
+        if (!is_wall(game, new_x, new_y))
+        {
+            player->x = new_x;
+            player->y = new_y;
+        }
+    }
+}
+
 
 void	handle_angle(t_player *player)
 {
@@ -93,7 +127,7 @@ void	handle_angle(t_player *player)
 		player->angle = 2 * PI;
 }
 
-void	move_player(t_player *player)
+void	move_player(t_game *game, t_player *player)
 {
 	float	cos_angle;
 	float	sin_angle;
@@ -101,5 +135,5 @@ void	move_player(t_player *player)
 	cos_angle = cos(player->angle);
 	sin_angle = sin(player->angle);
 	handle_angle(player);
-	handle_position(player, cos_angle, sin_angle);
+	handle_position(game, player, cos_angle, sin_angle);
 }
