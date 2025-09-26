@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tnolent <tnolent@student.42.fr>            +#+  +:+       +#+        */
+/*   By: barnaud <barnaud@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 14:29:24 by tnolent           #+#    #+#             */
-/*   Updated: 2025/09/26 11:00:34 by tnolent          ###   ########.fr       */
+/*   Updated: 2025/09/26 14:50:31 by barnaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ int	create_map(t_game *game, char **map, int i)
 		if (!empty_line(map, j++, k))
 			return (err_msg("Map is not the last element in file\n", 0));
 	}
-	// ici
+	// la
 	game->map = malloc(sizeof(char *) * game->mapinfo.end_of_map - i + 1);
 	if (!game->map)
 		return (err_msg(ERR_MALLOC, 0));
