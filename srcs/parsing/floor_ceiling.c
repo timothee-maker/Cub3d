@@ -6,7 +6,7 @@
 /*   By: tnolent <tnolent@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/23 16:16:53 by tnolent           #+#    #+#             */
-/*   Updated: 2025/09/26 10:46:18 by tnolent          ###   ########.fr       */
+/*   Updated: 2025/09/29 09:29:42 by tnolent          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ int	*get_view(char *rgb, int i)
 
 	result = malloc(sizeof(int) * 3);
 	if (!result)
-		return (NULL);
+		return (err_msg(ERR_MALLOC, 0), NULL);
 	start = 0;
 	l = 0;
 	while (rgb[i] && (rgb[i] == ' ' || rgb[i] == '\t' || rgb[i] == '\n'))

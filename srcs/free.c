@@ -6,7 +6,7 @@
 /*   By: tnolent <tnolent@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/17 12:07:33 by tnolent           #+#    #+#             */
-/*   Updated: 2025/09/23 16:12:58 by tnolent          ###   ########.fr       */
+/*   Updated: 2025/09/26 13:15:45 by tnolent          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,13 @@ void	free_tab(void **tab)
 
 	i = 0;
 	while (tab[i])
-		free(tab[i++]);
+	{
+		if (tab[i])
+		{
+			free(tab[i]);
+			tab[i++] = NULL;
+		}
+	}
 	if (tab)
 	{
 		free(tab);

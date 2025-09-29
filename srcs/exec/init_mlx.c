@@ -6,13 +6,11 @@
 /*   By: tnolent <tnolent@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/08 12:57:36 by tnolent           #+#    #+#             */
-/*   Updated: 2025/09/25 11:26:20 by tnolent          ###   ########.fr       */
+/*   Updated: 2025/09/29 09:26:47 by tnolent          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
-
-
 
 void	init_mlx(t_game *game)
 {

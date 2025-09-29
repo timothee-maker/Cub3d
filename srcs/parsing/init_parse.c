@@ -6,7 +6,7 @@
 /*   By: tnolent <tnolent@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/17 11:30:26 by tnolent           #+#    #+#             */
-/*   Updated: 2025/09/25 09:13:04 by tnolent          ###   ########.fr       */
+/*   Updated: 2025/09/26 14:11:23 by tnolent          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	init_index(t_index *index)
 	index->i = 0;
 	index->j = 0;
 	index->k = 0;
-	index->i = 0;
+	index->start_x = 0;
 }
 
 void	init_mapinfo(t_mapinfo *mapinfo)
