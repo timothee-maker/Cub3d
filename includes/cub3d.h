@@ -6,7 +6,7 @@
 /*   By: tnolent <tnolent@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 14:58:49 by tnolent           #+#    #+#             */
-/*   Updated: 2025/09/29 15:25:42 by tnolent          ###   ########.fr       */
+/*   Updated: 2025/09/29 15:31:58 by tnolent          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -178,6 +178,9 @@ char			*get_texture(char *path_tex, int i);
 int				fill_wall_textures(t_texinfo *texinfo, char *map, int j);
 int				empty_line(char **map, int j, int i);
 int				verify_access(t_texinfo *texture);
+int				coord_safe(char **map, int x, int y);
+char			**copy_map(char **map);
+int				map_all_coords_safe(char **map);
 
 /*-------------------------GAME------------------------------------*/
 int				draw_loop(t_game *parse);
