@@ -6,7 +6,7 @@
 /*   By: tnolent <tnolent@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 14:29:24 by tnolent           #+#    #+#             */
-/*   Updated: 2025/09/26 11:00:34 by tnolent          ###   ########.fr       */
+/*   Updated: 2025/09/29 09:31:36 by tnolent          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ int	create_map(t_game *game, char **map, int i)
 				if (ft_strchr("NSEW", map[j][k]) && !flag)
 					flag = 1;
 				else
-					return (0);
+					return (err_msg("Wrong element in map\n", 0));
 			}
 			if (empty_line(map, j, k))
 				break ;
@@ -74,7 +74,7 @@ int	create_map(t_game *game, char **map, int i)
 	if (!game->map)
 		return (err_msg(ERR_MALLOC, 0));
 	if (!fill_map(game, map, i))
-		return (0);
+		return (free_tab((void *)game->map), err_msg(ERR_MALLOC, 0));
 	return (2);
 }
 
@@ -140,7 +140,7 @@ int	parse_args(char *file, t_game *game)
 	if (!parse_data(file, game))
 		return (0);
 	if (!get_file_data(game, game->mapinfo.file))
-		return (0);
+		return ( 0);
 	if (!verify_access(&game->texinfo))
 		return (free_tex(&game->texinfo), 0);
 	free_tab((void **)game->mapinfo.file);
