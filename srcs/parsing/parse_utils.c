@@ -6,7 +6,7 @@
 /*   By: barnaud <barnaud@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 14:29:24 by tnolent           #+#    #+#             */
-/*   Updated: 2025/09/26 14:50:31 by barnaud          ###   ########.fr       */
+/*   Updated: 2025/09/29 11:40:59 by barnaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,16 @@ int	create_map(t_game *game, char **map, int i)
 		return (err_msg(ERR_MALLOC, 0));
 	if (!fill_map(game, map, i))
 		return (0);
+	char **tmp_map = copy_map(game->map);
+	if (!tmp_map)
+		return (err_msg("Erreur copie map\n", 0));
+	if (!map_all_coords_safe(tmp_map))
+	{
+		free_tab((void **)tmp_map);
+		return (err_msg("Map ouverte\n", 0));
+	}
+
+	free_tab((void **)tmp_map);
 	return (2);
 }
 
@@ -146,3 +156,5 @@ int	parse_args(char *file, t_game *game)
 	free_tab((void **)game->mapinfo.file);
 	return (1);
 }
+
+
