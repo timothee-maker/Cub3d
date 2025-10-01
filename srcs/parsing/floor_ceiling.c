@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   floor_ceiling.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tnolent <tnolent@student.42.fr>            +#+  +:+       +#+        */
+/*   By: barnaud <barnaud@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/23 16:16:53 by tnolent           #+#    #+#             */
-/*   Updated: 2025/09/29 09:29:42 by tnolent          ###   ########.fr       */
+/*   Updated: 2025/10/01 11:40:49 by barnaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,46 +53,6 @@ int	check_rgb(char *rgb)
 	if (ft_atoi(&rgb[i]) < 0)
 		return (free(rgb), err_msg("RGB must be greater than 0\n", 0));
 	return (free(rgb), 1);
-}
-
-int	*get_view(char *rgb, int i)
-{
-	int	start;
-	int	end;
-	int	l;
-	int	tmp_rslt;
-	int	*result;
-
-	result = malloc(sizeof(int) * 3);
-	if (!result)
-		return (err_msg(ERR_MALLOC, 0), NULL);
-	start = 0;
-	l = 0;
-	while (rgb[i] && (rgb[i] == ' ' || rgb[i] == '\t' || rgb[i] == '\n'))
-		i++;
-	start = i;
-	while (rgb[start] && (rgb[start] != '\n') && l < 3)
-	{
-		end = start;
-		while (rgb[end] && rgb[end] != '\n' && rgb[end] != ',')
-			end++;
-		if (!check_rgb(ft_substr(rgb, start, end - start)))
-			return (free(result), NULL);
-		tmp_rslt = ft_atoi_free(ft_substr(rgb, start, end - start));
-		if (rgb[end] == ',')
-			end++;
-		result[l++] = tmp_rslt;
-		start = end;
-	}
-	while (rgb[end])
-	{
-		if (rgb[end] != ' ' && rgb[end] != '\t' && rgb[end] != '\n')
-			return (free(result), NULL);
-		end++;
-	}
-	if (rgb[end] && rgb[end] != '\n')
-		return (free(result), NULL);
-	return (result);
 }
 
 int	fill_view_texture(t_texinfo *texinfo, char *map, int j)

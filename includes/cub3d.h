@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tnolent <tnolent@student.42.fr>            +#+  +:+       +#+        */
+/*   By: barnaud <barnaud@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 14:58:49 by tnolent           #+#    #+#             */
-/*   Updated: 2025/09/29 15:31:58 by tnolent          ###   ########.fr       */
+/*   Updated: 2025/10/01 11:30:37 by barnaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,7 +181,7 @@ int				verify_access(t_texinfo *texture);
 int				coord_safe(char **map, int x, int y);
 char			**copy_map(char **map);
 int				map_all_coords_safe(char **map);
-
+int				is_wall(t_game *game, float x, float y);
 /*-------------------------GAME------------------------------------*/
 int				draw_loop(t_game *parse);
 void			draw_line(t_player *player, t_game *parse, t_index *index,
@@ -193,6 +193,8 @@ void			move_player(t_game *game, t_player *player);
 int				key_press(int keycode, t_game *parse);
 void			set_player(t_player *player, t_game *game);
 int				key_release(int keycode, t_player *player);
+void			handle_position(t_game *game, t_player *player, float cos_angle,
+					float sin_angle);
 
 /*-------------------------------HOOK-------------------------*/
 void			destroy_win(t_game *parse);

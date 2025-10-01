@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tnolent <tnolent@student.42.fr>            +#+  +:+       +#+        */
+/*   By: barnaud <barnaud@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 14:29:24 by tnolent           #+#    #+#             */
-/*   Updated: 2025/09/29 15:31:34 by tnolent          ###   ########.fr       */
+/*   Updated: 2025/10/01 11:48:03 by barnaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,10 +31,11 @@ int	fill_map(t_game *game, char **map, int start)
 
 int	create_map(t_game *game, char **map, int i)
 {
-	int	j;
-	int	k;
-	int	flag;
-	int	biggest;
+	int		j;
+	int		k;
+	int		flag;
+	int		biggest;
+	char	**tmp_map;
 
 	game->mapinfo.start_of_map = i;
 	flag = 0;
@@ -69,13 +70,12 @@ int	create_map(t_game *game, char **map, int i)
 		if (!empty_line(map, j++, k))
 			return (err_msg("Map is not the last element in file\n", 0));
 	}
-	// la
 	game->map = malloc(sizeof(char *) * game->mapinfo.end_of_map - i + 1);
 	if (!game->map)
 		return (err_msg(ERR_MALLOC, 0));
 	if (!fill_map(game, map, i))
 		return (0);
-	char **tmp_map = copy_map(game->map);
+	tmp_map = copy_map(game->map);
 	if (!tmp_map)
 		return (err_msg("Erreur copie map\n", 0));
 	if (!map_all_coords_safe(tmp_map))
@@ -83,7 +83,6 @@ int	create_map(t_game *game, char **map, int i)
 		free_tab((void **)tmp_map);
 		return (err_msg("Map ouverte\n", 0));
 	}
-
 	free_tab((void **)tmp_map);
 	return (2);
 }
@@ -150,11 +149,9 @@ int	parse_args(char *file, t_game *game)
 	if (!parse_data(file, game))
 		return (0);
 	if (!get_file_data(game, game->mapinfo.file))
-		return ( 0);
+		return (0);
 	if (!verify_access(&game->texinfo))
 		return (free_tex(&game->texinfo), 0);
 	free_tab((void **)game->mapinfo.file);
 	return (1);
 }
-
-

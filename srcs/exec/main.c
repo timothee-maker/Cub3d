@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tnolent <tnolent@student.42.fr>            +#+  +:+       +#+        */
+/*   By: barnaud <barnaud@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 15:15:11 by tnolent           #+#    #+#             */
-/*   Updated: 2025/09/26 10:29:13 by tnolent          ###   ########.fr       */
+/*   Updated: 2025/10/01 11:12:52 by barnaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	main(int ac, char **av)
 	if (ac != 2)
 		return (printf("Must have 2 arguments\n"), 0);
 	init_mlx(&game);
-	if	(!parse_args(av[1], &game))
+	if (!parse_args(av[1], &game))
 		return (0);
 	set_mlx(&game);
 	mlx_hook(game.win, 2, 1L << 0, key_press, &game);
