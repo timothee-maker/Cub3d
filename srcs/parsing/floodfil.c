@@ -6,7 +6,7 @@
 /*   By: barnaud <barnaud@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/26 15:17:20 by barnaud           #+#    #+#             */
-/*   Updated: 2025/10/01 11:23:13 by barnaud          ###   ########.fr       */
+/*   Updated: 2025/10/01 13:26:22 by barnaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,18 @@ int	coord_safe(char **map, int x, int y)
 	if (x == 0 || map[x - 1][y] == ' ' || map[x - 1][y] == '\n')
 		return (0);
 	if (x == height - 1 || map[x + 1][y] == ' ' || map[x + 1][y] == '\n')
+		return (0);
+	if (x == 0 || y == 0 || map[x - 1][y - 1] == ' ' || map[x - 1][y
+		- 1] == '\n')
+		return (0);
+	if (x == 0 || y == width - 1 || map[x - 1][y + 1] == ' ' || map[x - 1][y
+		+ 1] == '\n')
+		return (0);
+	if (x == height - 1 || y == 0 || map[x + 1][y - 1] == ' ' || map[x + 1][y
+		- 1] == '\n')
+		return (0);
+	if (x == height - 1 || y == width - 1 || map[x + 1][y + 1] == ' ' || map[x
+		+ 1][y + 1] == '\n')
 		return (0);
 	return (1);
 }
