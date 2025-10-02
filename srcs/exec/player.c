@@ -6,7 +6,7 @@
 /*   By: tnolent <tnolent@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/01 10:37:28 by tnolent           #+#    #+#             */
-/*   Updated: 2025/09/26 10:28:53 by tnolent          ###   ########.fr       */
+/*   Updated: 2025/10/02 11:11:20 by tnolent          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,14 @@ void	set_angle(t_player *player)
 		player->angle = PI;
 }
 
+void	init_fov(t_fov *fov, t_player *player)
+{
+	fov->fov_radian = FOV * (PI / 180.0f);
+	fov->camera_planelenght = tan(fov->fov_radian / 2.0f);
+	fov->camera_planex = -sin(player->angle) * fov->camera_planelenght;
+	fov->camera_planey = cos(player->angle) * fov->camera_planelenght;
+}
+
 void	set_player(t_player *player, t_game *game)
 {
 	set_pos_player(player, game);
@@ -55,6 +63,7 @@ void	set_player(t_player *player, t_game *game)
 	player->k_right = false;
 	player->r_left = false;
 	player->r_right = false;
+	init_fov(&game->fov, &game->player);
 }
 
 int is_wall(t_game *game, float x, float y)

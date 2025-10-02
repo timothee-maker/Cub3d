@@ -6,7 +6,7 @@
 /*   By: tnolent <tnolent@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 15:15:11 by tnolent           #+#    #+#             */
-/*   Updated: 2025/09/26 10:29:13 by tnolent          ###   ########.fr       */
+/*   Updated: 2025/10/02 11:46:18 by tnolent          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,12 +48,11 @@ int	draw_loop(t_game *game)
 	move_player(game, player);
 	if (BONUS)
 		minimap(game, &image, player);
-	index.i = 0;
-	while (index.i < WIDTH)
+	index.i = -1;
+	while (++index.i < WIDTH)
 	{
 		draw_line(player, game, &index, &image);
 		index.start_x += fraction;
-		index.i++;
 	}
 	mlx_put_image_to_window(game->mlx, game->win, image.img, 0, 0);
 	mlx_destroy_image(game->mlx, image.img);

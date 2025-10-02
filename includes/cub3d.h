@@ -6,7 +6,7 @@
 /*   By: tnolent <tnolent@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 14:58:49 by tnolent           #+#    #+#             */
-/*   Updated: 2025/09/29 15:31:58 by tnolent          ###   ########.fr       */
+/*   Updated: 2025/10/02 11:47:16 by tnolent          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,14 +47,22 @@
 # define INT_MIN -2147483647
 # define SPEED 3
 # define ANGLE_SPEED 0.02
+# define FOV 60.0f
 
 # define BONUS 0
 
 # define ERR_MALLOC "AIIIIII le malloc a pete"
 
+typedef struct s_fov
+{
+	float		fov_radian;
+	float		camera_planelenght;
+	float		camera_planex;
+	float		camera_planey;
+}				t_fov;
+
 typedef struct s_ray
 {
-	float		corrected_dist;
 	float		ray_dir_x;
 	float		ray_dir_y;
 	float		delta_dx;
@@ -159,6 +167,7 @@ typedef struct s_game
 	t_cimg		texture[4];
 	t_mapinfo	mapinfo;
 	t_texinfo	texinfo;
+	t_fov		fov;
 }				t_game;
 
 /*--------------------------PARSING-------------------------------*/
@@ -221,6 +230,7 @@ void			init_ray(t_ray *ray, t_player *player, float start_x, int x);
 void			init_mapinfo(t_mapinfo *mapinfo);
 void			init_index(t_index *index);
 void			init_texinfo(t_texinfo *texinfo);
+void			init_fov(t_fov *fov, t_player *player);
 
 /*-------------------------SET STRUCT------------------------------------------*/
 void			set_texture(t_game *parse, t_ray *ray, t_player *player,
@@ -230,6 +240,7 @@ void			set_mlx(t_game *parse);
 /*---------------------------HANDLE IMAGES-----------------------------------*/
 void			load_img(t_game *parse, t_cimg *texture, char *str);
 void			get_color_pixel(t_pixel *tex, t_game *parse);
+int				create_rgb(t_game *game, int i);
 
 /*--------------------------ERROR-MSG-----------------------------------------*/
 int				err_msg(char *str, int code);

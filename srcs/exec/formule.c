@@ -6,7 +6,7 @@
 /*   By: tnolent <tnolent@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/05 15:47:19 by tnolent           #+#    #+#             */
-/*   Updated: 2025/09/15 15:29:12 by tnolent          ###   ########.fr       */
+/*   Updated: 2025/09/30 09:57:32 by tnolent          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,12 +58,12 @@ static void	init_ray_dda(t_player *player, t_ray *ray)
 {
 	ray->map_x = (int)(player->x / BLOCK);
 	ray->map_y = (int)(player->y / BLOCK);
-	ray->delta_dx = fabs(1 / ray->cos_angle);
-	ray->delta_dy = fabs(1 / ray->sin_angle);
+	ray->delta_dx = fabs(1.0f / ray->ray_dir_x);
+	ray->delta_dy = fabs(1.0f / ray->ray_dir_y);
 	if (ray->cos_angle < 0)
 	{
 		ray->stepx = -1;
-		ray->side_dx = (player->x / BLOCK - ray->map_x) * ray->delta_dx;
+		ray->side_dx = ((player->x / BLOCK) - ray->map_x) * ray->delta_dx;
 	}
 	else
 	{
