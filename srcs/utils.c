@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tnolent <tnolent@student.42.fr>            +#+  +:+       +#+        */
+/*   By: barnaud <barnaud@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/17 11:32:39 by tnolent           #+#    #+#             */
-/*   Updated: 2025/09/25 15:17:45 by tnolent          ###   ########.fr       */
+/*   Updated: 2025/10/01 11:11:20 by barnaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,4 +46,3 @@ int	err_msg(char *str, int code)
 		ft_putstr_fd(str, 2);
 	return (code);
 }
-

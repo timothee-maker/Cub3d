@@ -6,7 +6,7 @@
 /*   By: barnaud <barnaud@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/26 15:17:20 by barnaud           #+#    #+#             */
-/*   Updated: 2025/09/29 11:36:39 by barnaud          ###   ########.fr       */
+/*   Updated: 2025/10/01 13:26:22 by barnaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,31 @@ int	coord_safe(char **map, int x, int y)
 		return (0);
 	if (x == height - 1 || map[x + 1][y] == ' ' || map[x + 1][y] == '\n')
 		return (0);
+	if (x == 0 || y == 0 || map[x - 1][y - 1] == ' ' || map[x - 1][y
+		- 1] == '\n')
+		return (0);
+	if (x == 0 || y == width - 1 || map[x - 1][y + 1] == ' ' || map[x - 1][y
+		+ 1] == '\n')
+		return (0);
+	if (x == height - 1 || y == 0 || map[x + 1][y - 1] == ' ' || map[x + 1][y
+		- 1] == '\n')
+		return (0);
+	if (x == height - 1 || y == width - 1 || map[x + 1][y + 1] == ' ' || map[x
+		+ 1][y + 1] == '\n')
+		return (0);
 	return (1);
+}
+
+int	get_map_height(char **map)
+{
+	int	height;
+
+	height = 0;
+	if (!map)
+		return (0);
+	while (map[height])
+		height++;
+	return (height);
 }
 
 char	**copy_map(char **map)
@@ -64,11 +88,9 @@ char	**copy_map(char **map)
 	char	**new_map;
 	int		i;
 
-	if (!map)
+	height = get_map_height(map);
+	if (height == 0)
 		return (NULL);
-	height = 0;
-	while (map[height])
-		height++;
 	new_map = malloc(sizeof(char *) * (height + 1));
 	if (!new_map)
 		return (NULL);

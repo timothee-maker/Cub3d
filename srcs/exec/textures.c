@@ -6,7 +6,7 @@
 /*   By: tnolent <tnolent@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/12 15:19:54 by tnolent           #+#    #+#             */
-/*   Updated: 2025/09/30 10:51:20 by tnolent          ###   ########.fr       */
+/*   Updated: 2025/10/02 11:53:49 by tnolent          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,12 @@
 void	set_texture(t_game *parse, t_ray *ray, t_player *player, t_pixel *tex)
 {
 	init_tex(tex, ray);
+	if (ray->side == 0)
+		ray->dist = (ray->map_x - player->x / 64.0f + (1 - ray->stepx) / 2)
+			/ ray->ray_dir_x;
+	else
+		ray->dist = (ray->map_y - player->y / 64.0f + (1 - ray->stepy) / 2)
+			/ ray->ray_dir_y;
 	if (ray->side == 0)
 		tex->wall_x = player->y / 64.0f + ray->dist * ray->ray_dir_y;
 	else
@@ -25,7 +31,8 @@ void	set_texture(t_game *parse, t_ray *ray, t_player *player, t_pixel *tex)
 			&& ray->ray_dir_y < 0))
 		tex->tex_x = parse->texture[tex->face].width - tex->tex_x - 1;
 	tex->step = (float)parse->texture[tex->face].height / ray->height;
-	tex->tex_pos = (tex->start_y - (HEIGHT / 2) + ray->height / 2) * (int)tex->step;
+	tex->tex_pos = (tex->start_y - (HEIGHT / 2) + ray->height / 2)
+		* (int)tex->step;
 }
 
 void	get_color_pixel(t_pixel *tex, t_game *parse)
@@ -75,7 +82,7 @@ int	create_rgb(t_game *game, int i)
 		g = game->texinfo.floor[1];
 		b = game->texinfo.floor[2];
 	}
-	return (r & 0xFF) | ((g & 0xFF) << 8) | ((b & 0xFF) << 16);
+	return ((r & 0xFF) | ((g & 0xFF) << 8) | ((b & 0xFF) << 16));
 }
 
 // void	set_texture(t_game *parse, t_ray *ray, t_player *player, t_pixel *tex)
@@ -97,5 +104,6 @@ int	create_rgb(t_game *game, int i)
 // 			&& ray->ray_dir_y < 0))
 // 		tex->tex_x = parse->texture[tex->face].width - tex->tex_x - 1;
 // 	tex->step = (float)parse->texture[tex->face].height / ray->height;
-// 	tex->tex_pos = (tex->start_y - (HEIGHT / 2) + ray->height / 2) * (int)tex->step;
+// 	tex->tex_pos = (tex->start_y - (HEIGHT / 2) + ray->height / 2)
+		// * (int)tex->step;
 // }

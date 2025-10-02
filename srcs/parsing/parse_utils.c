@@ -6,7 +6,7 @@
 /*   By: tnolent <tnolent@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 14:29:24 by tnolent           #+#    #+#             */
-/*   Updated: 2025/09/29 15:38:32 by tnolent          ###   ########.fr       */
+/*   Updated: 2025/10/02 11:50:50 by tnolent          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ int	create_map(t_game *game, char **map, int i)
 	if (!game->map)
 		return (err_msg(ERR_MALLOC, 0));
 	if (!fill_map(game, map, i))
-		return (err_msg("Can't fill map\n", 0));
+		return (0);
 	tmp_map = copy_map(game->map);
 	if (!tmp_map)
 		return (err_msg("Erreur copie map\n", 0));
