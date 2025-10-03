@@ -6,7 +6,7 @@
 /*   By: tnolent <tnolent@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/12 15:53:37 by tnolent           #+#    #+#             */
-/*   Updated: 2025/10/03 11:01:35 by tnolent          ###   ########.fr       */
+/*   Updated: 2025/10/03 11:42:12 by tnolent          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,42 +16,48 @@ static void	set_parameters(t_ray *ray, t_player *player, t_game *game);
 static void	find_wall(t_ray *ray, t_cimg *image, t_game *game);
 void		minimap(t_game *game, t_cimg *image, t_player *player);
 
-void draw_line(t_player *player, t_game *game, t_index *index, t_cimg *image)
+void	set_limits(int *draw_start, int	*draw_end, t_ray *ray)
 {
-    t_ray ray;
-    t_pixel tex;
-    int draw_start;
-    int draw_end;
-    
-    init_ray(&ray, player, index->start_x, index->i);
-    find_wall(&ray, image, game);
-    cast_ray(game, player, &ray);
-    set_parameters(&ray, player, game);
-    set_texture(game, &ray, player, &tex);
-    draw_start = ray.start_y;
-    draw_end = ray.end;
-    
-    if (draw_start < 0)
-        draw_start = 0;
-    if (draw_end >= HEIGHT)
-        draw_end = HEIGHT - 1;
-    
-    if (!BONUS)
-    {
-        ray.index = -1;
-        while (++ray.index < HEIGHT)
-        {
-            if (ray.index < draw_start)
-                put_pixel(ray.rev_screen, ray.index, create_rgb(game, 1), image);
-            else if (ray.index < draw_end)
-            {
-                get_color_pixel(&tex, game);
-                put_pixel(ray.rev_screen, ray.index, tex.color, image);
-            }
-            else
-                put_pixel(ray.rev_screen, ray.index, create_rgb(game, 2), image);
-        }
-    }
+	*draw_start = ray->start_y;
+	*draw_end = ray->end;
+	if (*draw_start < 0)
+		*draw_start = 0;
+	if (*draw_end >= HEIGHT)
+		*draw_end = HEIGHT - 1;
+}
+
+
+void	draw_line(t_player *player, t_game *game, t_index *index, t_cimg *image)
+{
+	t_ray	ray;
+	t_pixel	tex;
+	int		draw_start;
+	int		draw_end;
+
+	init_ray(&ray, player, index->start_x, index->i);
+	find_wall(&ray, image, game);
+	cast_ray(game, player, &ray);
+	set_parameters(&ray, player, game);
+	set_texture(game, &ray, player, &tex);
+	set_limits(&draw_start, &draw_end, &ray);
+	if (!BONUS)
+	{
+		ray.index = -1;
+		while (++ray.index < HEIGHT)
+		{
+			if (ray.index < draw_start)
+				put_pixel(ray.rev_screen, ray.index, create_rgb(game, 1),
+					image);
+			else if (ray.index < draw_end)
+			{
+				get_color_pixel(&tex, game);
+				put_pixel(ray.rev_screen, ray.index, tex.color, image);
+			}
+			else
+				put_pixel(ray.rev_screen, ray.index, create_rgb(game, 2),
+					image);
+		}
+	}
 }
 
 // void	draw_line(t_player *player, t_game *game, t_index *index, t_cimg *image)

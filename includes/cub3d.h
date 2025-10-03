@@ -6,7 +6,7 @@
 /*   By: tnolent <tnolent@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 14:58:49 by tnolent           #+#    #+#             */
-/*   Updated: 2025/10/03 11:03:46 by tnolent          ###   ########.fr       */
+/*   Updated: 2025/10/03 11:04:40 by tnolent          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@
 # define RIGHT 65363
 # define BLOCK 64
 # define INT_MAX 2147483647
-# define INT_MIN -2147483647
+# define INT_MIN -2147483648
 # define SPEED 3
 # define ANGLE_SPEED 0.02
 # define FOV 60.0f

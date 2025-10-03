@@ -6,66 +6,36 @@
 /*   By: tnolent <tnolent@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/12 15:19:54 by tnolent           #+#    #+#             */
-/*   Updated: 2025/10/03 10:59:03 by tnolent          ###   ########.fr       */
+/*   Updated: 2025/10/03 11:05:57 by tnolent          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-void set_texture(t_game *parse, t_ray *ray, t_player *player, t_pixel *tex)
+void	set_texture(t_game *parse, t_ray *ray, t_player *player, t_pixel *tex)
 {
-    init_tex(tex, ray);
-    
-    if (ray->side == 0)
-        ray->dist = (ray->map_x - player->x / 64.0f + (1 - ray->stepx) / 2)
-            / ray->ray_dir_x;
-    else
-        ray->dist = (ray->map_y - player->y / 64.0f + (1 - ray->stepy) / 2)
-            / ray->ray_dir_y;
-    
-    if (ray->side == 0)
-        tex->wall_x = player->y / 64.0f + ray->dist * ray->ray_dir_y;
-    else
-        tex->wall_x = player->x / 64.0f + ray->dist * ray->ray_dir_x;
-    
-    tex->wall_x -= floor(tex->wall_x);
-    tex->tex_x = (int)(tex->wall_x * (float)(parse->texture[tex->face].width));
-    
-    if ((ray->side == 0 && ray->ray_dir_x > 0) || (ray->side == 1
-        && ray->ray_dir_y < 0))
-        tex->tex_x = parse->texture[tex->face].width - tex->tex_x - 1;
-    
-    tex->step = (float)parse->texture[tex->face].height / ray->height;
-    
-    // CORRECTION : Ajuster tex_pos selon le clipping
-    if (ray->start_y < 0)
-        tex->tex_pos = (-ray->start_y) * tex->step;  // Commence plus loin dans la texture
-    else
-        tex->tex_pos = 0;
+	init_tex(tex, ray);
+	if (ray->side == 0)
+		ray->dist = (ray->map_x - player->x / 64.0f + (1 - ray->stepx) / 2)
+			/ ray->ray_dir_x;
+	else
+		ray->dist = (ray->map_y - player->y / 64.0f + (1 - ray->stepy) / 2)
+			/ ray->ray_dir_y;
+	if (ray->side == 0)
+		tex->wall_x = player->y / 64.0f + ray->dist * ray->ray_dir_y;
+	else
+		tex->wall_x = player->x / 64.0f + ray->dist * ray->ray_dir_x;
+	tex->wall_x -= floor(tex->wall_x);
+	tex->tex_x = (int)(tex->wall_x * (float)(parse->texture[tex->face].width));
+	if ((ray->side == 0 && ray->ray_dir_x > 0) || (ray->side == 1
+			&& ray->ray_dir_y < 0))
+		tex->tex_x = parse->texture[tex->face].width - tex->tex_x - 1;
+	tex->step = (float)parse->texture[tex->face].height / ray->height;
+	if (ray->start_y < 0)
+		tex->tex_pos = (-ray->start_y) * tex->step;
+	else
+		tex->tex_pos = 0;
 }
-
-// void	set_texture(t_game *parse, t_ray *ray, t_player *player, t_pixel *tex)
-// {
-// 	init_tex(tex, ray);
-// 	if (ray->side == 0)
-// 		ray->dist = (ray->map_x - player->x / 64.0f + (1 - ray->stepx) / 2)
-// 			/ ray->ray_dir_x;
-// 	else
-// 		ray->dist = (ray->map_y - player->y / 64.0f + (1 - ray->stepy) / 2)
-// 			/ ray->ray_dir_y;
-// 	if (ray->side == 0)
-// 		tex->wall_x = player->y / 64.0f + ray->dist * ray->ray_dir_y;
-// 	else
-// 		tex->wall_x = player->x / 64.0f + ray->dist * ray->ray_dir_x;
-// 	tex->wall_x -= floor(tex->wall_x);
-// 	tex->tex_x = (int)(tex->wall_x * (float)(parse->texture[tex->face].width));
-// 	if ((ray->side == 0 && ray->ray_dir_x > 0) || (ray->side == 1
-// 			&& ray->ray_dir_y < 0))
-// 		tex->tex_x = parse->texture[tex->face].width - tex->tex_x - 1;
-// 	tex->step = (float)parse->texture[tex->face].height / ray->height;
-// 	tex->tex_pos = (tex->start_y - (HEIGHT / 2) + ray->height / 2)
-// 		* (int)tex->step;
-// }
 
 void	get_color_pixel(t_pixel *tex, t_game *parse)
 {
@@ -121,15 +91,15 @@ int	create_rgb(t_game *game, int i)
 // {
 // 	init_tex(tex, ray);
 // 	if (ray->side == 0)
-// 		ray->corrected_dist = (ray->map_x - player->x / 64.0f + (1 - ray->stepx)
-// 				/ 2) / ray->ray_dir_x;
+// 		ray->dist = (ray->map_x - player->x / 64.0f + (1 - ray->stepx) / 2)
+// 			/ ray->ray_dir_x;
 // 	else
-// 		ray->corrected_dist = (ray->map_y - player->y / 64.0f + (1 - ray->stepy)
-// 				/ 2) / ray->ray_dir_y;
+// 		ray->dist = (ray->map_y - player->y / 64.0f + (1 - ray->stepy) / 2)
+// 			/ ray->ray_dir_y;
 // 	if (ray->side == 0)
-// 		tex->wall_x = player->y / 64.0f + ray->corrected_dist * ray->ray_dir_y;
+// 		tex->wall_x = player->y / 64.0f + ray->dist * ray->ray_dir_y;
 // 	else
-// 		tex->wall_x = player->x / 64.0f + ray->corrected_dist * ray->ray_dir_x;
+// 		tex->wall_x = player->x / 64.0f + ray->dist * ray->ray_dir_x;
 // 	tex->wall_x -= floor(tex->wall_x);
 // 	tex->tex_x = (int)(tex->wall_x * (float)(parse->texture[tex->face].width));
 // 	if ((ray->side == 0 && ray->ray_dir_x > 0) || (ray->side == 1
@@ -137,5 +107,5 @@ int	create_rgb(t_game *game, int i)
 // 		tex->tex_x = parse->texture[tex->face].width - tex->tex_x - 1;
 // 	tex->step = (float)parse->texture[tex->face].height / ray->height;
 // 	tex->tex_pos = (tex->start_y - (HEIGHT / 2) + ray->height / 2)
-		// * (int)tex->step;
+// 		* (int)tex->step;
 // }
