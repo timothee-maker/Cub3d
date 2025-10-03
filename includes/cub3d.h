@@ -6,7 +6,7 @@
 /*   By: tnolent <tnolent@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 14:58:49 by tnolent           #+#    #+#             */
-/*   Updated: 2025/10/03 11:04:40 by tnolent          ###   ########.fr       */
+/*   Updated: 2025/10/03 16:17:15 by tnolent          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,9 +82,11 @@ typedef struct s_ray
 	int			map_y;
 	int			stepx;
 	int			stepy;
-	int			rev_screen;
+	int			rs;
 	float		side_dx;
 	float		side_dy;
+	int			ds;
+	int			de;
 }				t_ray;
 
 typedef struct s_pixel
@@ -186,11 +188,20 @@ int				fill_view_texture(t_texinfo *texinfo, char *map, int j);
 char			*get_texture(char *path_tex, int i);
 int				fill_wall_textures(t_texinfo *texinfo, char *map, int j);
 int				empty_line(char **map, int j, int i);
-int				verify_access(t_texinfo *texture);
+int				verify_access(t_game *game);
+int				all_texture(t_game *game);
 int				coord_safe(char **map, int x, int y);
 char			**copy_map(char **map);
 int				map_all_coords_safe(char **map);
 int				is_wall(t_game *game, float x, float y);
+int				fill_map(t_game *game, char **map, int start);
+int				get_biggest_line(char **map, int start);
+int				check_map_char(char c, int *flag);
+int				check_map_lines(char **map, int start, int *flag, int *end);
+int				check_map_user(int flag);
+int				check_map_after(char **map, int j, int k);
+int				alloc_and_fill_map(t_game *game, char **map, int i);
+
 /*-------------------------GAME------------------------------------*/
 int				draw_loop(t_game *parse);
 void			draw_line(t_player *player, t_game *parse, t_index *index,
@@ -206,7 +217,7 @@ void			handle_position(t_game *game, t_player *player, float cos_angle,
 					float sin_angle);
 
 /*-------------------------------HOOK-------------------------*/
-void			destroy_win(t_game *parse);
+void			destroy_win(t_game *parse, int flag);
 int				close_window(t_game *parse);
 int				key_hook(int keycode, t_game *parse);
 
@@ -252,7 +263,7 @@ void			minimap(t_game *parse, t_cimg *image, t_player *player);
 
 /*------------------------FREE-SHIT-----------------------------------------*/
 void			free_tab(void **tab);
-void			free_tex(t_texinfo *texture);
+void			free_tex(t_texinfo *texture, int flag);
 int				ft_atoi_free(const char *str);
 
 #endif

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   textures.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: barnaud <barnaud@student.42.fr>            +#+  +:+       +#+        */
+/*   By: tnolent <tnolent@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/23 16:18:59 by tnolent           #+#    #+#             */
-/*   Updated: 2025/10/01 11:16:32 by barnaud          ###   ########.fr       */
+/*   Updated: 2025/10/03 16:18:50 by tnolent          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,11 +33,11 @@ char	*get_texture(char *path_tex, int i)
 	return (ft_substr(path_tex, i, j));
 }
 
-int	verify_access(t_texinfo *texture)
+int	verify_access(t_game *game)
 {
-	if (access(texture->north, F_OK) || access(texture->north, F_OK)
-		|| access(texture->east, F_OK) || access(texture->west, F_OK))
-		return (0);
+	if (access(game->texinfo.north, F_OK) || access(game->texinfo.north, F_OK)
+		|| access(game->texinfo.east, F_OK) || access(game->texinfo.west, F_OK))
+		return (err_msg("Texture file not valid", 0), destroy_win(game, 1), 0);
 	return (1);
 }
 
@@ -53,5 +53,14 @@ int	fill_wall_textures(t_texinfo *texinfo, char *map, int j)
 		texinfo->west = get_texture(map, j + 2);
 	else
 		return (0);
+	return (1);
+}
+
+int	all_texture(t_game *game)
+{
+	if (!game->texinfo.ceiling || !game->texinfo.floor || !game->texinfo.north
+		|| !game->texinfo.south || !game->texinfo.east || !game->texinfo.west)
+		return (err_msg("Miss element in .cub file or invalid element\n", 0),
+			destroy_win(game, 1), 0);
 	return (1);
 }

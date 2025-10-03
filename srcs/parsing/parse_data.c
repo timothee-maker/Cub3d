@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_data.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: barnaud <barnaud@student.42.fr>            +#+  +:+       +#+        */
+/*   By: tnolent <tnolent@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/18 10:40:38 by tnolent           #+#    #+#             */
-/*   Updated: 2025/10/01 11:18:02 by barnaud          ###   ########.fr       */
+/*   Updated: 2025/10/03 15:53:47 by tnolent          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,13 +94,13 @@ int	parse_data(char *path, t_game *game)
 		return (0);
 	game->mapinfo.path = path;
 	game->mapinfo.file = ft_calloc(game->mapinfo.nb_line + 1, sizeof(char *));
-	if (!(game->mapinfo.file))
-		return (err_msg(ERR_MALLOC, 0));
+	if (!game->mapinfo.file)
+		return (free(game->mapinfo.file), err_msg(ERR_MALLOC, 0));
 	game->mapinfo.fd = open_file(path);
 	if (game->mapinfo.fd < 0)
 		return (err_msg("ERREUR fd", 0));
 	if (!fill_tab(game))
-		return (close(game->mapinfo.fd));
+		return (free_tab((void **)game->mapinfo.file), close(game->mapinfo.fd));
 	close(game->mapinfo.fd);
 	return (1);
 }

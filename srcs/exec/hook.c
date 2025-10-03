@@ -6,38 +6,50 @@
 /*   By: tnolent <tnolent@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 10:16:50 by tnolent           #+#    #+#             */
-/*   Updated: 2025/09/26 10:57:42 by tnolent          ###   ########.fr       */
+/*   Updated: 2025/10/03 16:15:49 by tnolent          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-void	destroy_win(t_game *game)
+void	destroy_win(t_game *game, int flag)
 {
-	mlx_destroy_image(game->mlx, game->texture[0].img);
-	mlx_destroy_image(game->mlx, game->texture[1].img);
-	mlx_destroy_image(game->mlx, game->texture[2].img);
-	mlx_destroy_image(game->mlx, game->texture[3].img);
-	mlx_destroy_window(game->mlx, game->win);
-	mlx_destroy_display(game->mlx);
-	free_tab((void *)game->map);
-	free(game->mlx);
-	free(game->texinfo.ceiling);
-	free(game->texinfo.floor);
-	game->mlx = NULL;
+	if (flag)
+		free_tex(&game->texinfo, 0);
+	if (game->texture[0].img)
+		mlx_destroy_image(game->mlx, game->texture[0].img);
+	if (game->texture[1].img)
+		mlx_destroy_image(game->mlx, game->texture[1].img);
+	if (game->texture[2].img)
+		mlx_destroy_image(game->mlx, game->texture[2].img);
+	if (game->texture[3].img)
+		mlx_destroy_image(game->mlx, game->texture[3].img);
+	if (game->win)
+		mlx_destroy_window(game->mlx, game->win);
+	if (game->mlx)
+	{
+		mlx_destroy_display(game->mlx);
+		free(game->mlx);
+	}
+	if (game->map)
+		free_tab((void *)game->map);
+	if (game->texinfo.ceiling)
+		free(game->texinfo.ceiling);
+	if (game->texinfo.floor)
+		free(game->texinfo.floor);
 	exit(0);
 }
 
 int	close_window(t_game *game)
 {
-	destroy_win(game);
+	destroy_win(game, 0);
 	return (0);
 }
 
 int	key_hook(int keycode, t_game *game)
 {
 	if (keycode == 65307)
-		destroy_win(game);
+		destroy_win(game, 0);
 	return (0);
 }
 
@@ -60,7 +72,7 @@ int	key_press(int keycode, t_game *game)
 	if (keycode == RIGHT)
 		player->r_left = true;
 	if (keycode == ECHAP)
-		destroy_win(game);
+		destroy_win(game, 0);
 	return (0);
 }
 

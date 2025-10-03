@@ -6,76 +6,17 @@
 /*   By: tnolent <tnolent@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 14:29:24 by tnolent           #+#    #+#             */
-/*   Updated: 2025/10/03 12:00:11 by tnolent          ###   ########.fr       */
+/*   Updated: 2025/10/03 16:16:38 by tnolent          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-int	fill_map(t_game *game, char **map, int start)
+static int	check_map_closed(char **map)
 {
-	int	i;
-	int	end;
-
-	end = game->mapinfo.end_of_map - 1;
-	i = 0;
-	while (start < end)
-	{
-		game->map[i] = ft_strdup(map[start++]);
-		if (!game->map[i++])
-			return (free_tab((void *)map), 0);
-	}
-	game->map[i] = NULL;
-	return (1);
-}
-
-int	create_map(t_game *game, char **map, int i)
-{
-	int		j;
-	int		k;
-	int		flag;
-	int		biggest;
 	char	**tmp_map;
 
-	game->mapinfo.start_of_map = i;
-	flag = 0;
-	j = i;
-	biggest = 0;
-	while (map[j])
-	{
-		if (ft_strlen(map[j]) > biggest)
-			biggest = ft_strlen(map[j]);
-		k = -1;
-		while (map[j][++k])
-		{
-			if (!ft_isdigit(map[j][k]) && map[j][k] != ' ' && map[j][k] != '\t'
-				&& map[j][k] != '\n')
-			{
-				if (ft_strchr("NSEW", map[j][k]) && !flag)
-					flag = 1;
-				else
-					return (err_msg("Wrong element in map\n", 0));
-			}
-			if (empty_line(map, j, k))
-				break ;
-		}
-		if (empty_line(map, j++, k))
-			break ;
-	}
-	if (!flag)
-		return (err_msg("Miss user in map\n", 0));
-	game->mapinfo.end_of_map = j;
-	while (map[j])
-	{
-		if (!empty_line(map, j++, k))
-			return (free_tex(&game->texinfo), err_msg("Map is not the last element in file\n", 0));
-	}
-	game->map = malloc(sizeof(char *) * game->mapinfo.end_of_map - i + 1);
-	if (!game->map)
-		return (err_msg(ERR_MALLOC, 0));
-	if (!fill_map(game, map, i))
-		return (0);
-	tmp_map = copy_map(game->map);
+	tmp_map = copy_map(map);
 	if (!tmp_map)
 		return (err_msg("Erreur copie map\n", 0));
 	if (!map_all_coords_safe(tmp_map))
@@ -84,6 +25,34 @@ int	create_map(t_game *game, char **map, int i)
 		return (err_msg("Map ouverte\n", 0));
 	}
 	free_tab((void **)tmp_map);
+	return (1);
+}
+
+int	create_map(t_game *game, char **map, int i)
+{
+	int	j;
+	int	k;
+	int	flag;
+	int	biggest;
+
+	k = 0;
+	flag = 0;
+	game->mapinfo.start_of_map = i;
+	biggest = get_biggest_line(map, i);
+	if (!check_map_lines(map, i, &flag, &j))
+		return (0);
+	if (!check_map_user(flag))
+		return (0);
+	game->mapinfo.end_of_map = j;
+	if (!check_map_after(map, j, k))
+		return (free_tex(&game->texinfo, 1),
+			free_tab((void **)game->mapinfo.file), 0);
+	if (!alloc_and_fill_map(game, map, i))
+		return (free_tex(&game->texinfo, 1),
+			free_tab((void **)game->mapinfo.file), 0);
+	if (!check_map_closed(game->map))
+		return (free_tex(&game->texinfo, 1),
+			free_tab((void **)game->mapinfo.file), 0);
 	return (2);
 }
 
@@ -149,9 +118,11 @@ int	parse_args(char *file, t_game *game)
 	if (!parse_data(file, game))
 		return (0);
 	if (!get_file_data(game, game->mapinfo.file))
-		return (0);
-	if (!verify_access(&game->texinfo))
-		return (free_tex(&game->texinfo), 0);
+		return (free_tab((void **)game->mapinfo.file), destroy_win(game, 1), 0);
 	free_tab((void **)game->mapinfo.file);
+	if (!all_texture(game))
+		return (0);
+	if (!verify_access(game))
+		return (free_tex(&game->texinfo, 1), 0);
 	return (1);
 }

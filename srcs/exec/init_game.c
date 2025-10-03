@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_game.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tnolent <tnolent@student.42.fr>            +#+  +:+       +#+        */
+/*   By: barnaud <barnaud@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/12 17:32:09 by tnolent           #+#    #+#             */
-/*   Updated: 2025/10/02 11:46:38 by tnolent          ###   ########.fr       */
+/*   Updated: 2025/10/03 12:25:08 by barnaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,5 +35,5 @@ void	init_ray(t_ray *ray, t_player *player, float start_x, int x)
 	ray->cos_angle = ray->ray_dir_x;
 	ray->sin_angle = ray->ray_dir_y;
 	ray->index = -1;
-	ray->rev_screen = WIDTH - x - 1;
+	ray->rs = WIDTH - x - 1;
 }

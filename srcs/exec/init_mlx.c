@@ -6,11 +6,19 @@
 /*   By: tnolent <tnolent@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/08 12:57:36 by tnolent           #+#    #+#             */
-/*   Updated: 2025/09/29 09:26:47 by tnolent          ###   ########.fr       */
+/*   Updated: 2025/10/03 15:00:34 by tnolent          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
+
+void	init_textures(t_game *game)
+{
+	game->texture[0].img = NULL;
+	game->texture[1].img = NULL;
+	game->texture[2].img = NULL;
+	game->texture[3].img = NULL;
+}
 
 void	init_mlx(t_game *game)
 {
@@ -19,6 +27,7 @@ void	init_mlx(t_game *game)
 	game->map = NULL;
 	init_mapinfo(&game->mapinfo);
 	init_texinfo(&game->texinfo);
+	init_textures(game);
 }
 
 void	init_texture_img(t_game *game, t_cimg *image, char *path)

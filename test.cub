@@ -1,11 +1,9 @@
 NO       ./maps/shrek.xpm    
-C                                   225,30,0            
 SO ./maps/golem-clash-royal.xpm  
-WE ./maps/saymyame.xpm   
-
+WE ./maps/saymyame.xpm
 F 320, 100   , 1
 EA             ./maps/rider.xpm
-
+C                                   225,30,3       
 
 
     11111111111111111111111

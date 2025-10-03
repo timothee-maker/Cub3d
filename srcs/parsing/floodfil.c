@@ -6,37 +6,13 @@
 /*   By: barnaud <barnaud@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/26 15:17:20 by barnaud           #+#    #+#             */
-/*   Updated: 2025/10/01 13:26:22 by barnaud          ###   ########.fr       */
+/*   Updated: 2025/10/03 12:54:51 by barnaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-int	map_all_coords_safe(char **map)
-{
-	int	x;
-	int	y;
-
-	x = 0;
-	while (map[x])
-	{
-		y = 0;
-		while (map[x][y])
-		{
-			if (map[x][y] == '0' || map[x][y] == 'S' || map[x][y] == 'N'
-				|| map[x][y] == 'E' || map[x][y] == 'W')
-			{
-				if (!coord_safe(map, x, y))
-					return (0);
-			}
-			y++;
-		}
-		x++;
-	}
-	return (1);
-}
-
-int	coord_safe(char **map, int x, int y)
+int	check_borders(char **map, int x, int y)
 {
 	int	height;
 	int	width;
@@ -55,6 +31,20 @@ int	coord_safe(char **map, int x, int y)
 		return (0);
 	if (x == height - 1 || map[x + 1][y] == ' ' || map[x + 1][y] == '\n')
 		return (0);
+	return (1);
+}
+
+int	check_corners(char **map, int x, int y)
+{
+	int	height;
+	int	width;
+
+	height = 0;
+	width = 0;
+	while (map[height])
+		height++;
+	while (map[x][width])
+		width++;
 	if (x == 0 || y == 0 || map[x - 1][y - 1] == ' ' || map[x - 1][y
 		- 1] == '\n')
 		return (0);
@@ -67,6 +57,34 @@ int	coord_safe(char **map, int x, int y)
 	if (x == height - 1 || y == width - 1 || map[x + 1][y + 1] == ' ' || map[x
 		+ 1][y + 1] == '\n')
 		return (0);
+	return (1);
+}
+
+int	map_all_coords_safe(char **map)
+{
+	int	x;
+	int	y;
+
+	x = 0;
+	while (map[x])
+	{
+		y = 0;
+		while (map[x][y])
+		{
+			if (map[x][y] == '0' || map[x][y] == 'S' || map[x][y] == 'N'
+				|| map[x][y] == 'E' || map[x][y] == 'W')
+			{
+				if (!check_borders(map, x, y) || !check_corners(map, x, y))
+				{
+					printf("Erreur à x=%d y=%d (caractère: %c)\n", x, y,
+						map[x][y]);
+					return (0);
+				}
+			}
+			y++;
+		}
+		x++;
+	}
 	return (1);
 }
 

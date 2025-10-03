@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   floor_ceiling.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: barnaud <barnaud@student.42.fr>            +#+  +:+       +#+        */
+/*   By: tnolent <tnolent@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/23 16:16:53 by tnolent           #+#    #+#             */
-/*   Updated: 2025/10/01 11:40:49 by barnaud          ###   ########.fr       */
+/*   Updated: 2025/10/03 16:11:08 by tnolent          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,9 +49,9 @@ int	check_rgb(char *rgb)
 	while (rgb[i] && (rgb[i] == ' ' || rgb[i] == '\t'))
 		i++;
 	if (!valid_number(&rgb[i]))
-		return (free(rgb), err_msg("RGB must be lower than 2147483647\n", 0));
+		return (free(rgb), 0);
 	if (ft_atoi(&rgb[i]) < 0)
-		return (free(rgb), err_msg("RGB must be greater than 0\n", 0));
+		return (free(rgb), 0);
 	return (free(rgb), 1);
 }
 
