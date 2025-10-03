@@ -6,7 +6,7 @@
 /*   By: tnolent <tnolent@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/23 16:18:59 by tnolent           #+#    #+#             */
-/*   Updated: 2025/10/03 16:18:50 by tnolent          ###   ########.fr       */
+/*   Updated: 2025/10/03 17:14:35 by tnolent          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,11 +37,11 @@ int	verify_access(t_game *game)
 {
 	if (access(game->texinfo.north, F_OK) || access(game->texinfo.north, F_OK)
 		|| access(game->texinfo.east, F_OK) || access(game->texinfo.west, F_OK))
-		return (err_msg("Texture file not valid", 0), destroy_win(game, 1), 0);
+		return (err_msg("Texture file not valid\n", 0), destroy_win(game, 1), 0);
 	return (1);
 }
 
-int	fill_wall_textures(t_texinfo *texinfo, char *map, int j)
+int	fill_wall_textures(t_game *game, t_texinfo *texinfo, char *map, int j)
 {
 	if (map[j] == 'N' && map[j + 1] == 'O' && !texinfo->north)
 		texinfo->north = get_texture(map, j + 2);
@@ -52,7 +52,7 @@ int	fill_wall_textures(t_texinfo *texinfo, char *map, int j)
 	else if (map[j] == 'W' && map[j + 1] == 'E' && !texinfo->west)
 		texinfo->west = get_texture(map, j + 2);
 	else
-		return (0);
+		return (free_tab((void **)game->mapinfo.file), 0);
 	return (1);
 }
 

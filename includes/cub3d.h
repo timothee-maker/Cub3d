@@ -6,7 +6,7 @@
 /*   By: tnolent <tnolent@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 14:58:49 by tnolent           #+#    #+#             */
-/*   Updated: 2025/10/03 16:17:15 by tnolent          ###   ########.fr       */
+/*   Updated: 2025/10/03 17:13:55 by tnolent          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -184,9 +184,9 @@ int				verify_extension(char *file);
 bool			valid_number(char *str);
 int				check_rgb(char *rgb);
 int				*get_view(char *rgb, int i);
-int				fill_view_texture(t_texinfo *texinfo, char *map, int j);
+int				fill_view_texture(t_game *game, t_texinfo *texinfo, char *map, int j);
 char			*get_texture(char *path_tex, int i);
-int				fill_wall_textures(t_texinfo *texinfo, char *map, int j);
+int				fill_wall_textures(t_game *game, t_texinfo *texinfo, char *map, int j);
 int				empty_line(char **map, int j, int i);
 int				verify_access(t_game *game);
 int				all_texture(t_game *game);

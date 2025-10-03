@@ -6,7 +6,7 @@
 /*   By: tnolent <tnolent@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 14:29:24 by tnolent           #+#    #+#             */
-/*   Updated: 2025/10/03 16:16:38 by tnolent          ###   ########.fr       */
+/*   Updated: 2025/10/03 17:20:46 by tnolent          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,8 @@ int	create_map(t_game *game, char **map, int i)
 			free_tab((void **)game->mapinfo.file), 0);
 	if (!check_map_closed(game->map))
 		return (free_tex(&game->texinfo, 1),
-			free_tab((void **)game->mapinfo.file), 0);
+			free_tab((void **)game->mapinfo.file), free_tab((void **)game->map),
+			0);
 	return (2);
 }
 
@@ -65,13 +66,13 @@ int	get_text_map(t_game *game, char **map, int i, int j)
 		if (map[i][j + 1] && ft_isprint(map[i][j + 1])
 			&& !ft_isdigit(map[i][j]))
 		{
-			if (!fill_wall_textures(&game->texinfo, map[i], j))
-				return (err_msg("texture invalide", 0));
+			if (!fill_wall_textures(game, &game->texinfo, map[i], j))
+				return (free_tex(&game->texinfo, 1), err_msg(NULL, 0));
 			return (2);
 		}
 		else
 		{
-			if (!fill_view_texture(&game->texinfo, map[i], j))
+			if (!fill_view_texture(game, &game->texinfo, map[i], j))
 				return (0);
 			return (2);
 		}
@@ -118,7 +119,7 @@ int	parse_args(char *file, t_game *game)
 	if (!parse_data(file, game))
 		return (0);
 	if (!get_file_data(game, game->mapinfo.file))
-		return (free_tab((void **)game->mapinfo.file), destroy_win(game, 1), 0);
+		return (0);
 	free_tab((void **)game->mapinfo.file);
 	if (!all_texture(game))
 		return (0);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   floodfil.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: barnaud <barnaud@student.42.fr>            +#+  +:+       +#+        */
+/*   By: tnolent <tnolent@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/26 15:17:20 by barnaud           #+#    #+#             */
-/*   Updated: 2025/10/03 12:54:51 by barnaud          ###   ########.fr       */
+/*   Updated: 2025/10/03 17:02:59 by tnolent          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,11 +75,7 @@ int	map_all_coords_safe(char **map)
 				|| map[x][y] == 'E' || map[x][y] == 'W')
 			{
 				if (!check_borders(map, x, y) || !check_corners(map, x, y))
-				{
-					printf("Erreur à x=%d y=%d (caractère: %c)\n", x, y,
-						map[x][y]);
 					return (0);
-				}
 			}
 			y++;
 		}

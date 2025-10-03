@@ -6,7 +6,7 @@
 /*   By: tnolent <tnolent@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/23 16:16:53 by tnolent           #+#    #+#             */
-/*   Updated: 2025/10/03 16:11:08 by tnolent          ###   ########.fr       */
+/*   Updated: 2025/10/03 17:17:29 by tnolent          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,13 +55,15 @@ int	check_rgb(char *rgb)
 	return (free(rgb), 1);
 }
 
-int	fill_view_texture(t_texinfo *texinfo, char *map, int j)
+int	fill_view_texture(t_game *game, t_texinfo *texinfo, char *map, int j)
 {
 	if (map[j] == 'C' && !texinfo->ceiling)
 		texinfo->ceiling = get_view(map, j + 1);
 	else if (map[j] == 'F' && !texinfo->floor)
 		texinfo->floor = get_view(map, j + 1);
 	else
-		return (0);
+		return (free_tex(&game->texinfo, 1),
+			free_tab((void **)game->mapinfo.file),
+			err_msg("Wrong element in file\n", 0));
 	return (1);
 }
