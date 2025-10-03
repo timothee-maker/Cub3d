@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tnolent <tnolent@student.42.fr>            +#+  +:+       +#+        */
+/*   By: barnaud <barnaud@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 14:58:49 by tnolent           #+#    #+#             */
-/*   Updated: 2025/10/03 11:04:40 by tnolent          ###   ########.fr       */
+/*   Updated: 2025/10/03 13:01:52 by barnaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,9 +82,11 @@ typedef struct s_ray
 	int			map_y;
 	int			stepx;
 	int			stepy;
-	int			rev_screen;
+	int			rs;
 	float		side_dx;
 	float		side_dy;
+	int			ds;
+	int			de;
 }				t_ray;
 
 typedef struct s_pixel
@@ -191,6 +193,13 @@ int				coord_safe(char **map, int x, int y);
 char			**copy_map(char **map);
 int				map_all_coords_safe(char **map);
 int				is_wall(t_game *game, float x, float y);
+int				fill_map(t_game *game, char **map, int start);
+int				get_biggest_line(char **map, int start);
+int				check_map_char(char c, int *flag);
+int				check_map_lines(char **map, int start, int *flag, int *end);
+int				check_map_user(int flag);
+int				check_map_after(char **map, int j, int k);
+int				alloc_and_fill_map(t_game *game, char **map, int i);
 /*-------------------------GAME------------------------------------*/
 int				draw_loop(t_game *parse);
 void			draw_line(t_player *player, t_game *parse, t_index *index,

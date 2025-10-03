@@ -11,7 +11,8 @@ SRCS_FILES = exec/main exec/player exec/player2 exec/position exec/hook exec/for
 			 exec/parsing \
 			 exec/init_mlx exec/textures exec/cub exec/init_game exec/mlx_utils \
 			 gnl/get_next_line gnl/get_next_line_utils \
-			 parsing/find_error parsing/parse_utils parsing/init_parse \
+			 parsing/find_error parsing/parse_utils parsing/parse_utils2 \
+			 parsing/parse_utils3 parsing/init_parse \
 			 parsing/parse_data parsing/parse_data2 parsing/floor_ceiling parsing/textures\
 			 parsing/floodfil parsing/view utils free
 SRCS := $(addprefix srcs/, $(addsuffix .c, $(SRCS_FILES)))
