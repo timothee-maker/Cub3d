@@ -6,7 +6,7 @@
 /*   By: tnolent <tnolent@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/17 12:07:33 by tnolent           #+#    #+#             */
-/*   Updated: 2025/09/26 13:15:45 by tnolent          ###   ########.fr       */
+/*   Updated: 2025/10/03 12:04:17 by tnolent          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,16 @@ void	free_tab(void **tab)
 
 void	free_tex(t_texinfo *texture)
 {
-	free(texture->north);
-	free(texture->south);
-	free(texture->east);
-	free(texture->west);
+	if (texture->north)
+		free(texture->north);
+	if (texture->south)
+		free(texture->south);
+	if (texture->east)
+		free(texture->east);
+	if (texture->west)
+		free(texture->west);
+	if (texture->ceiling)
+		free(texture->ceiling);
+	if (texture->floor)
+		free(texture->floor);
 }

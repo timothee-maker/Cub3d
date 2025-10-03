@@ -6,7 +6,7 @@
 /*   By: tnolent <tnolent@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 14:29:24 by tnolent           #+#    #+#             */
-/*   Updated: 2025/10/02 11:50:50 by tnolent          ###   ########.fr       */
+/*   Updated: 2025/10/03 12:00:11 by tnolent          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ int	create_map(t_game *game, char **map, int i)
 	while (map[j])
 	{
 		if (!empty_line(map, j++, k))
-			return (err_msg("Map is not the last element in file\n", 0));
+			return (free_tex(&game->texinfo), err_msg("Map is not the last element in file\n", 0));
 	}
 	game->map = malloc(sizeof(char *) * game->mapinfo.end_of_map - i + 1);
 	if (!game->map)
