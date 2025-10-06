@@ -6,7 +6,7 @@
 /*   By: tnolent <tnolent@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/18 10:40:38 by tnolent           #+#    #+#             */
-/*   Updated: 2025/10/03 15:53:47 by tnolent          ###   ########.fr       */
+/*   Updated: 2025/10/06 10:01:16 by tnolent          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	get_nb_lines(char *path)
 	line_count = 0;
 	fd = open(path, O_RDONLY);
 	if (fd < 0)
-		return (err_msg(ERR_MALLOC, -1));
+		return (err_msg("Error while opening file\n", -1));
 	line = get_next_line(fd);
 	while (line != NULL)
 	{

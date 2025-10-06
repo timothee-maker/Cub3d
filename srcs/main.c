@@ -6,7 +6,7 @@
 /*   By: tnolent <tnolent@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 15:15:11 by tnolent           #+#    #+#             */
-/*   Updated: 2025/10/02 11:49:51 by tnolent          ###   ########.fr       */
+/*   Updated: 2025/10/06 09:58:02 by tnolent          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	main(int ac, char **av)
 	t_game	game;
 
 	if (ac != 2)
-		return (printf("Must have 2 arguments\n"), 0);
+		return (err_msg("Must have 2 arguments\n", 0));
 	init_mlx(&game);
 	if (!parse_args(av[1], &game))
 		return (0);

@@ -6,7 +6,7 @@
 /*   By: tnolent <tnolent@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/08 12:57:36 by tnolent           #+#    #+#             */
-/*   Updated: 2025/10/03 15:00:34 by tnolent          ###   ########.fr       */
+/*   Updated: 2025/10/06 10:15:06 by tnolent          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,18 +30,6 @@ void	init_mlx(t_game *game)
 	init_textures(game);
 }
 
-void	init_texture_img(t_game *game, t_cimg *image, char *path)
-{
-	init_img_clean(image);
-	image->img = mlx_xpm_file_to_image(game->mlx, path, &game->img.width,
-			&game->img.height);
-	if (image->img == NULL)
-		exit(0);
-	image->addr = mlx_get_data_addr(image->img, &image->bits_per_pixel,
-			&image->line_length, &image->endian);
-	return ;
-}
-
 void	init_img_clean(t_cimg *img)
 {
 	img->img = NULL;
@@ -55,9 +43,14 @@ void	init_img(t_game *game, t_cimg *image)
 {
 	init_img_clean(image);
 	image->img = mlx_new_image(game->mlx, WIDTH, HEIGHT);
-	if (image->img == NULL)
-		exit(0);
+	if (!image->img)
+		destroy_win(game, 0);
 	image->addr = mlx_get_data_addr(image->img, &image->bits_per_pixel,
 			&image->line_length, &image->endian);
+	if (!image->addr)
+	{
+		mlx_destroy_image(game->mlx, image->img);
+		destroy_win(game, 0);
+	}
 	return ;
 }

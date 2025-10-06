@@ -6,7 +6,7 @@
 /*   By: tnolent <tnolent@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 14:58:49 by tnolent           #+#    #+#             */
-/*   Updated: 2025/10/06 09:55:06 by tnolent          ###   ########.fr       */
+/*   Updated: 2025/10/06 10:19:58 by tnolent          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -192,7 +192,6 @@ int				fill_wall_textures(t_game *game, t_texinfo *texinfo, char *map,
 int				empty_line(char **map, int j, int i);
 int				verify_access(t_game *game);
 int				all_texture(t_game *game);
-int				coord_safe(char **map, int x, int y);
 char			**copy_map(char **map);
 int				map_all_coords_safe(char **map);
 int				is_wall(t_game *game, float x, float y);
@@ -237,7 +236,6 @@ void			put_pixel(int x, int y, int color, t_cimg *img);
 
 /*-------------------------INIT------------------------------------------*/
 void			init_img_clean(t_cimg *img);
-void			init_texture_img(t_game *parse, t_cimg *image, char *path);
 void			init_img(t_game *parse, t_cimg *image);
 void			init_tex(t_pixel *tex, t_ray *ray);
 void			init_mlx(t_game *parse);
@@ -245,7 +243,6 @@ void			init_ray(t_ray *ray, t_player *player, float start_x, int x);
 void			init_mapinfo(t_mapinfo *mapinfo);
 void			init_index(t_index *index);
 void			init_texinfo(t_texinfo *texinfo);
-void			init_fov(t_fov *fov, t_player *player);
 
 /*-------------------------SET STRUCT---------------------------------------*/
 void			set_texture(t_game *parse, t_ray *ray, t_player *player,

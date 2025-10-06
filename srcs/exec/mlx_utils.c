@@ -6,7 +6,7 @@
 /*   By: tnolent <tnolent@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/05 16:01:41 by tnolent           #+#    #+#             */
-/*   Updated: 2025/10/03 15:07:43 by tnolent          ###   ########.fr       */
+/*   Updated: 2025/10/06 10:06:14 by tnolent          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,11 @@ void	set_mlx(t_game *game)
 {
 	set_player(&game->player, game);
 	game->mlx = mlx_init();
+	if (!game->mlx)
+		destroy_win(game, 1);
 	game->win = mlx_new_window(game->mlx, WIDTH, HEIGHT, "Cub3d");
+	if (!game->win)
+		destroy_win(game, 1);
 	load_img(game, &game->texture[0], game->texinfo.north);
 	load_img(game, &game->texture[1], game->texinfo.south);
 	load_img(game, &game->texture[2], game->texinfo.east);
@@ -29,11 +33,17 @@ void	load_img(t_game *game, t_cimg *texture, char *str)
 	texture->img = mlx_xpm_file_to_image(game->mlx, str, &texture->width,
 			&texture->height);
 	if (!texture->img)
+	{
+		err_msg("Error while convert xpm to image\n", 0);
 		destroy_win(game, 1);
+	}
 	texture->addr = mlx_get_data_addr(texture->img, &texture->bits_per_pixel,
 			&texture->line_length, &texture->endian);
 	if (!texture->addr)
+	{
+		err_msg("Error while getting data address\n", 0);
 		destroy_win(game, 1);
+	}
 }
 
 void	clear_image(t_cimg *img)
