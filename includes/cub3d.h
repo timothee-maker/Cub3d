@@ -6,7 +6,7 @@
 /*   By: tnolent <tnolent@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 14:58:49 by tnolent           #+#    #+#             */
-/*   Updated: 2025/10/03 17:13:55 by tnolent          ###   ########.fr       */
+/*   Updated: 2025/10/06 09:55:06 by tnolent          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -184,9 +184,11 @@ int				verify_extension(char *file);
 bool			valid_number(char *str);
 int				check_rgb(char *rgb);
 int				*get_view(char *rgb, int i);
-int				fill_view_texture(t_game *game, t_texinfo *texinfo, char *map, int j);
+int				fill_view_texture(t_game *game, t_texinfo *texinfo, char *map,
+					int j);
 char			*get_texture(char *path_tex, int i);
-int				fill_wall_textures(t_game *game, t_texinfo *texinfo, char *map, int j);
+int				fill_wall_textures(t_game *game, t_texinfo *texinfo, char *map,
+					int j);
 int				empty_line(char **map, int j, int i);
 int				verify_access(t_game *game);
 int				all_texture(t_game *game);
@@ -245,12 +247,12 @@ void			init_index(t_index *index);
 void			init_texinfo(t_texinfo *texinfo);
 void			init_fov(t_fov *fov, t_player *player);
 
-/*-------------------------SET STRUCT------------------------------------------*/
+/*-------------------------SET STRUCT---------------------------------------*/
 void			set_texture(t_game *parse, t_ray *ray, t_player *player,
 					t_pixel *tex);
 void			set_mlx(t_game *parse);
 
-/*---------------------------HANDLE IMAGES-----------------------------------*/
+/*---------------------------HANDLE IMAGES----------------------------------*/
 void			load_img(t_game *parse, t_cimg *texture, char *str);
 void			get_color_pixel(t_pixel *tex, t_game *parse);
 int				create_rgb(t_game *game, int i);
